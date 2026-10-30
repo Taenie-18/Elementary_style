@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:yaosushi:stage0:input:v0.1",
+  "title": "民间借贷要素式起诉状抽取请求",
+  "description": "Stage 0 输入契约。只接受已解析的纯文本 fileContext，不接受 DOCX。所有 items 属于同一案件，按数组顺序拼接。",
+  "type": "object",
+  "required": [
+    "requestId",
+    "templateId",
+    "schemaVersion",
+    "fileContext"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "requestId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "description": "调用方生成的请求 ID，用于关联 review 和日志；MVP 不做幂等缓存。"
+    },
+    "templateId": {
+      "const": "private_lending_complaint",
+      "description": "Stage 0 只支持民间借贷模板。"
+    },
+    "schemaVersion": {
+      "const": "0.1.0",
+      "description": "业务 Schema 版本；与 loan_complaint.schema.json 的 $id 语义对应。"
+    },
+    "fileContext": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "description": "同一案件的已解析文本，按数组顺序拼接；每项建议为一个段落或文本块。",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 50000,
+        "description": "一个段落/文本块；不允许空字符串。"
+      }
+    }
+  },
+  "x-business-max-total-chars": 100000,
+  "x-business-notes": [
+    "空数组、超过 maxItems、超过单 item maxLength 由 Schema 拒绝。",
+    "总字符数 100000 由业务校验执行，因为 JSON Schema 无法直接表达数组元素长度之和。",
+    "只有空白的 item 由业务校验拒绝；Schema 的 minLength 只保证长度大于 0。"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "原告": [
+    {
+      "category": "法人、非法人组织",
+      "data": {
+        "name": "宜昌示例工程有限公司",
+        "residence": null,
+        "registrationPlace": "宜昌市伍家岗区示例大道30号",
+        "legalRep": "周总",
+        "position": "董事长",
+        "phone": "07170000001",
+        "creditCode": "91420500EXAMPLE007",
+        "type": [
+          "有限责任公司"
+        ],
+        "ownership": "其他",
+        "ownershipOther": "集体所有制",
+        "stateOwnershipType": null
+      }
+    }
+  ]
+}

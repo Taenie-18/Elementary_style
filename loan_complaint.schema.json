@@ -1,0 +1,2004 @@
+{
+  "type": "object",
+  "properties": {
+    "原告": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/party"
+      },
+      "minItems": 1,
+      "description": "原告实际出现的主体记录；模板空白自然人或组织栏不是一条记录。",
+      "x-source-row": [
+        2,
+        3
+      ],
+      "x-module": "parties"
+    },
+    "被告": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/party"
+      },
+      "minItems": 1,
+      "description": "被告实际出现的主体记录；模板空白自然人或组织栏不是一条记录。",
+      "x-source-row": [
+        5,
+        6
+      ],
+      "x-module": "parties"
+    },
+    "第三人": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/party"
+      },
+      "minItems": 1,
+      "description": "第三人实际出现的主体记录；模板空白自然人或组织栏不是一条记录。",
+      "x-source-row": [
+        7,
+        8
+      ],
+      "x-module": "parties"
+    },
+    "委托诉讼代理人": {
+      "type": "object",
+      "properties": {
+        "是否委托": {
+          "description": "是否委托诉讼代理人；有、无均未选且无明确文字时为 null。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "$ref": "#/$defs/hasNone"
+        },
+        "代理人": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "description": "本条委托诉讼代理人的姓名。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              },
+              "workUnit": {
+                "description": "本条代理人的单位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              },
+              "position": {
+                "description": "本条代理人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              },
+              "phone": {
+                "description": "本条代理人的联系电话，多个号码保留字符串。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "minLength": 1
+              },
+              "authorization": {
+                "description": "本条代理人的一般授权或特别授权；不能由代理人职业推断。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+                "$ref": "#/$defs/authorization"
+              }
+            },
+            "required": [
+              "name",
+              "workUnit",
+              "position",
+              "phone",
+              "authorization"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "description": "仅输出实际出现的代理人；委托人关联保存在内部主体索引及审核信息，不增加到正式字段中。"
+        }
+      },
+      "required": [
+        "是否委托",
+        "代理人"
+      ],
+      "additionalProperties": false,
+      "description": "代理人总状态和重复记录。",
+      "x-source-row": 4,
+      "x-module": "parties",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "是否委托": {
+                "const": "无"
+              }
+            },
+            "required": [
+              "是否委托"
+            ]
+          },
+          "then": {
+            "properties": {
+              "代理人": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "诉讼请求": {
+      "type": "object",
+      "properties": {
+        "诉讼请求原文": {
+          "description": "诉讼请求自由文本区完整内容，保留编号、括号及费用条件；不自行重写。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "x-source-row": 10
+        },
+        "1.本金": {
+          "type": "object",
+          "properties": {
+            "截至日期": {
+              "description": "诉请尚欠本金的统计截止日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "尚欠本金": {
+              "description": "诉请尚欠本金，不能直接使用历史借款交付总额替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+            },
+            "币种": {
+              "description": "本金币种，仅依据明确人民币、外币等文字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "截至日期",
+            "尚欠本金",
+            "币种"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 11
+        },
+        "2.利息": {
+          "type": "object",
+          "properties": {
+            "截至日期": {
+              "description": "尚欠或暂计利息的统计日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "尚欠利息": {
+              "description": "原文明示的利息金额，不按利率重新计算替换。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+            },
+            "计算方式": {
+              "description": "完整保留利息基数、标准、起止及暂计条件。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "计算基数": {
+              "description": "诉请计算利息采用的本金基数，需明示。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+            },
+            "利率标准": {
+              "description": "诉请利息采用的文字标准，如一年期贷款市场报价利率；不查询外部数值。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "起算日期": {
+              "description": "诉请利息明确起算日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "暂计截止日期": {
+              "description": "利息暂计截止日期，不代表最终停止计息。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "是否请求支付至实际清偿之日止": {
+              "description": "利息是否请求至实际清偿之日；可依据勾选或明确诉请。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            }
+          },
+          "required": [
+            "截至日期",
+            "尚欠利息",
+            "计算方式",
+            "计算基数",
+            "利率标准",
+            "起算日期",
+            "暂计截止日期",
+            "是否请求支付至实际清偿之日止"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 12
+        },
+        "3.是否要求提前还款或解除合同": {
+          "type": "object",
+          "properties": {
+            "是否要求": {
+              "description": "是否要求提前还款或解除合同，不能由已逾期推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "请求类型": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "enum": [
+                  "提前还款（加速到期）",
+                  "解除合同"
+                ]
+              },
+              "minItems": 1,
+              "description": "本项下提前还款与解除合同选项。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+              "uniqueItems": true,
+              "x-enum-group": "acceleration"
+            }
+          },
+          "required": [
+            "是否要求",
+            "请求类型"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 13,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否要求": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否要求"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "请求类型": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "4.是否主张担保权利": {
+          "type": "object",
+          "properties": {
+            "是否主张": {
+              "description": "是否主张担保权利；不能从未填写担保信息直接推定否。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "内容": {
+              "description": "主张担保权利的具体内容。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "是否主张",
+            "内容"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 14,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否主张": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否主张"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "内容": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "5.是否主张实现债权的费用": {
+          "type": "object",
+          "properties": {
+            "是否主张": {
+              "description": "是否请求实现债权的费用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "明细": {
+              "description": "费用明细及条件，保留如有等限定，不生成未提供金额。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "是否主张",
+            "明细"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 15,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否主张": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否主张"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "明细": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "6.是否主张诉讼费用": {
+          "description": "是否请求诉讼费用；不由第5项自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "$ref": "#/$defs/yesNo",
+          "x-source-row": 16
+        },
+        "7.其他请求": {
+          "description": "本栏明确填写的其他请求；不得把已有本金和利息重复放入。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "x-source-row": 17
+        },
+        "8.标的总额": {
+          "type": "object",
+          "properties": {
+            "金额": {
+              "description": "原文明示标的总额；计算检查只告警，不改写。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+            },
+            "暂计截止日期": {
+              "description": "标的总额标注的暂计日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          "required": [
+            "金额",
+            "暂计截止日期"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 18
+        }
+      },
+      "required": [
+        "诉讼请求原文",
+        "1.本金",
+        "2.利息",
+        "3.是否要求提前还款或解除合同",
+        "4.是否主张担保权利",
+        "5.是否主张实现债权的费用",
+        "6.是否主张诉讼费用",
+        "7.其他请求",
+        "8.标的总额"
+      ],
+      "additionalProperties": false,
+      "description": "诉讼请求；保留原有1至8项编号。",
+      "x-module": "claims"
+    },
+    "约定管辖和诉前保全": {
+      "type": "object",
+      "properties": {
+        "1.有无仲裁、法院管辖约定": {
+          "type": "object",
+          "properties": {
+            "有无约定": {
+              "description": "有无仲裁或法院管辖约定；双方都未选时为 null，不依据无书面合同推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/hasNone"
+            },
+            "合同条款及内容": {
+              "description": "仲裁或管辖条款原文及内容，不自行推荐法院。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "有无约定",
+            "合同条款及内容"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 20,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "有无约定": {
+                    "const": "无"
+                  }
+                },
+                "required": [
+                  "有无约定"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "合同条款及内容": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "2.是否已经诉前保全": {
+          "type": "object",
+          "properties": {
+            "是否已经诉前保全": {
+              "description": "只指已经发生的诉前保全，不能从拟申请保全或费用如有推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "保全法院": {
+              "description": "已实施诉前保全的法院。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "保全时间": {
+              "description": "已实施诉前保全的完整日期；仅有年月时保留在审核原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "保全案号": {
+              "description": "诉前保全案号，保留括号及字母。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "是否已经诉前保全",
+            "保全法院",
+            "保全时间",
+            "保全案号"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 21,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否已经诉前保全": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否已经诉前保全"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "保全法院": {
+                    "type": "null"
+                  },
+                  "保全时间": {
+                    "type": "null"
+                  },
+                  "保全案号": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "required": [
+        "1.有无仲裁、法院管辖约定",
+        "2.是否已经诉前保全"
+      ],
+      "additionalProperties": false,
+      "description": "约定管辖及已经实施的诉前保全。",
+      "x-module": "remaining"
+    },
+    "事实与理由": {
+      "type": "object",
+      "properties": {
+        "事实与理由原文": {
+          "description": "事实与理由自由文本完整原文，保留当事人关系、承诺及催收表述。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "x-source-row": 23
+        },
+        "1.合同的签订情况（名称、编号、签订时间、地点等）": {
+          "type": "object",
+          "properties": {
+            "签订情况原文": {
+              "description": "本栏合同签订情况原文，如无书面合同；不能改写为不存在借贷合同。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "合同名称": {
+              "description": "明确提供的合同名称；模板文书标题不是借款合同名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "合同编号": {
+              "description": "明确提供的合同编号。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "签订时间": {
+              "description": "合同明确签订日期，不能用转账日期替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "签订地点": {
+              "description": "合同明确签订地点，不能用当事人住址替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "签订情况原文",
+            "合同名称",
+            "合同编号",
+            "签订时间",
+            "签订地点"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 24
+        },
+        "2.签订主体": {
+          "type": "object",
+          "properties": {
+            "出借人": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "description": "明确的出借人名称，借助主体索引识别代称，不把原告身份一律等同出借人。 未提及时为 null。",
+              "uniqueItems": true
+            },
+            "借款人": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "description": "明确的借款人名称，不把被告身份一律等同借款人。 未提及时为 null。",
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "出借人",
+            "借款人"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 25
+        },
+        "3.借款金额": {
+          "type": "object",
+          "properties": {
+            "约定": {
+              "description": "明确约定的借款金额；不能仅凭实际转账额补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+            },
+            "实际提供": {
+              "description": "实际交付的借款金额，可依据事实原文中的明确转账。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+            },
+            "提供方式": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "enum": [
+                  "现金",
+                  "转账",
+                  "其他"
+                ]
+              },
+              "minItems": 1,
+              "description": "借款实际提供方式，可依据明确叙述，不限于本栏勾选。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+              "uniqueItems": true,
+              "x-enum-group": "deliveryMethod"
+            },
+            "其他说明": {
+              "description": "提供方式为其他时对应的说明。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "约定",
+            "实际提供",
+            "提供方式",
+            "其他说明"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 26,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "其他说明": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "其他说明"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "提供方式": {
+                    "type": "array",
+                    "contains": {
+                      "const": "其他"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "4.借款期限": {
+          "type": "object",
+          "properties": {
+            "是否到期": {
+              "description": "借款是否到期，可依据现还款期限已过等明确表述；不依赖运行当天推算。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "约定起始日期": {
+              "description": "约定借款期限的完整起始日期，不能以交付日期替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "约定截止日期": {
+              "description": "约定借款期限的完整截止日期；仅年月、月底等相对表述首版不补成日。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "期限原文": {
+              "description": "保留约定期限、不完整日期或月底前等承诺原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "是否到期",
+            "约定起始日期",
+            "约定截止日期",
+            "期限原文"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 27
+        },
+        "5.借款利率": {
+          "type": "object",
+          "properties": {
+            "利率": {
+              "description": "合同约定利率的百分数数值，例如年利率12%保存12；不填诉请LPR标准。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+            },
+            "周期": {
+              "description": "约定利率周期，年季月不能猜测。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/ratePeriod"
+            },
+            "合同条款编号": {
+              "description": "约定利率条款的条号。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "补充内容": {
+              "description": "借款利率的补充说明，例如借期内不计息、逾期利率标准、利率调整方式等；仅依据原文，未提及为 null。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "利率",
+            "周期",
+            "合同条款编号",
+            "补充内容"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 28
+        },
+        "6.借款提供时间": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "提供日期": {
+                "description": "该笔借款实际交付日期，可依据事实段明确转账日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "金额": {
+                "description": "本次借款交付金额，不混用尚欠本金。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+              }
+            },
+            "required": [
+              "提供日期",
+              "金额"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "description": "按每次明确交付建立记录，未提及时 null；重复记录属于可复制栏位的结构化扩展。",
+          "x-source-row": 29
+        },
+        "7.还款方式": {
+          "type": "object",
+          "properties": {
+            "方式": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "enum": [
+                  "到期一次性还本付息",
+                  "按月计息、到期一次性还本",
+                  "按季计息、到期一次性还本",
+                  "按年计息、到期一次性还本",
+                  "其他"
+                ]
+              },
+              "minItems": 1,
+              "description": "合同明确约定的还款方式；不得由归还承诺推定一次还本付息。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+              "uniqueItems": true,
+              "x-enum-group": "repaymentMethod"
+            },
+            "其他说明": {
+              "description": "其他还款方式的对应说明。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "方式",
+            "其他说明"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 30,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "其他说明": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "其他说明"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "方式": {
+                    "type": "array",
+                    "contains": {
+                      "const": "其他"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "8.还款情况": {
+          "type": "object",
+          "properties": {
+            "已还本金": {
+              "description": "明确已偿还本金；尚欠等于交付额也不能自动填0。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+            },
+            "已还利息": {
+              "description": "明确已付利息；未记载不能填0。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+            },
+            "还息至": {
+              "description": "明确已付利息覆盖至的完整日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          "required": [
+            "已还本金",
+            "已还利息",
+            "还息至"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 31
+        },
+        "9.是否存在逾期还款": {
+          "type": "object",
+          "properties": {
+            "是否存在": {
+              "description": "是否存在逾期还款，依据本栏或明确事实。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "逾期起始日期": {
+              "description": "明确逾期起始日；不能仅以诉请利息起算日替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "逾期时长原文": {
+              "description": "明确的逾期时长描述；表格固定提示至今已逾期不是填写值。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "是否存在",
+            "逾期起始日期",
+            "逾期时长原文"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 32,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否存在": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否存在"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "逾期起始日期": {
+                    "type": "null"
+                  },
+                  "逾期时长原文": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "10.是否签订物的担保（抵押、质押）合同": {
+          "type": "object",
+          "properties": {
+            "是否签订": {
+              "description": "是否签订物的担保合同，依据明确否定或勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "签订时间": {
+              "description": "物的担保合同完整签订日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          "required": [
+            "是否签订",
+            "签订时间"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 33,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否签订": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否签订"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "签订时间": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "11.担保人、担保物": {
+          "type": "object",
+          "properties": {
+            "担保人": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "description": "明确的物的担保人名称，不把空白栏识别成主体。 未提及时为 null。",
+              "uniqueItems": true
+            },
+            "担保物": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "description": "明确的担保物描述，首版不拆出未在模板列明的权属证号等字段。 未提及时为 null。",
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "担保人",
+            "担保物"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 34
+        },
+        "12.是否最高额担保（抵押、质押）": {
+          "type": "object",
+          "properties": {
+            "是否最高额担保": {
+              "description": "是否最高额抵押或质押担保。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "担保债权的确定时间": {
+              "description": "明确担保债权确定日期，不用签订日期替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "担保额度": {
+              "description": "明确最高额担保额度。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+            }
+          },
+          "required": [
+            "是否最高额担保",
+            "担保债权的确定时间",
+            "担保额度"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 35,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否最高额担保": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否最高额担保"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "担保债权的确定时间": {
+                    "type": "null"
+                  },
+                  "担保额度": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "13.是否办理抵押、质押登记": {
+          "type": "object",
+          "properties": {
+            "是否办理": {
+              "description": "是否办理抵押或质押登记。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "登记类型": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "enum": [
+                  "正式登记",
+                  "预告登记"
+                ]
+              },
+              "minItems": 1,
+              "description": "正式登记、预告登记选项。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+              "uniqueItems": true,
+              "x-enum-group": "registrationType"
+            }
+          },
+          "required": [
+            "是否办理",
+            "登记类型"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 36,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否办理": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否办理"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "登记类型": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "14.是否签订保证合同": {
+          "type": "object",
+          "properties": {
+            "是否签订": {
+              "description": "是否签订保证合同。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "签订时间": {
+              "description": "保证合同完整签订日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            },
+            "保证人": {
+              "type": [
+                "array",
+                "null"
+              ],
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "description": "保证合同中的保证人名称，不能与物的担保人自动合并。 未提及时为 null。",
+              "uniqueItems": true
+            },
+            "主要内容": {
+              "description": "保证合同主要内容原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "保证方式": {
+              "description": "单份保证合同的一般保证或连带责任保证，不自行法律推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/guaranteeType"
+            }
+          },
+          "required": [
+            "是否签订",
+            "签订时间",
+            "保证人",
+            "主要内容",
+            "保证方式"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 37,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否签订": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否签订"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "签订时间": {
+                    "type": "null"
+                  },
+                  "保证人": {
+                    "type": "null"
+                  },
+                  "主要内容": {
+                    "type": "null"
+                  },
+                  "保证方式": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "15.其他担保方式": {
+          "type": "object",
+          "properties": {
+            "是否存在": {
+              "description": "是否存在其他担保方式。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/yesNo"
+            },
+            "形式": {
+              "description": "其他担保的明确形式。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "签订时间": {
+              "description": "其他担保的完整签订日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+            }
+          },
+          "required": [
+            "是否存在",
+            "形式",
+            "签订时间"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 38,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "是否存在": {
+                    "const": "否"
+                  }
+                },
+                "required": [
+                  "是否存在"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "形式": {
+                    "type": "null"
+                  },
+                  "签订时间": {
+                    "type": "null"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "16.其他需要说明的内容（可另附页）": {
+          "description": "本栏或明确标注附件中的其他说明，不重复自动生成事实摘要。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "x-source-row": 39
+        },
+        "17.请求依据": {
+          "type": "object",
+          "properties": {
+            "合同约定": {
+              "description": "原文提出的合同约定依据；没有书面合同不等于本字段自动为无。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            },
+            "法律规定": {
+              "description": "仅转录原文援引的法规条文；不补全、不验证其当前法律适用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "type": [
+                "string",
+                "null"
+              ],
+              "minLength": 1
+            }
+          },
+          "required": [
+            "合同约定",
+            "法律规定"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 40
+        },
+        "18.证据清单（可另附页）": {
+          "description": "只转录正式证据清单或明确列明的附件；事实中提到录音不自动生成证据名称和编号。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "x-source-row": 41
+        }
+      },
+      "required": [
+        "事实与理由原文",
+        "1.合同的签订情况（名称、编号、签订时间、地点等）",
+        "2.签订主体",
+        "3.借款金额",
+        "4.借款期限",
+        "5.借款利率",
+        "6.借款提供时间",
+        "7.还款方式",
+        "8.还款情况",
+        "9.是否存在逾期还款",
+        "10.是否签订物的担保（抵押、质押）合同",
+        "11.担保人、担保物",
+        "12.是否最高额担保（抵押、质押）",
+        "13.是否办理抵押、质押登记",
+        "14.是否签订保证合同",
+        "15.其他担保方式",
+        "16.其他需要说明的内容（可另附页）",
+        "17.请求依据",
+        "18.证据清单（可另附页）"
+      ],
+      "additionalProperties": false,
+      "description": "事实与理由；保留原有1至18项编号。",
+      "x-module": "facts"
+    },
+    "对纠纷解决方式的意愿": {
+      "type": "object",
+      "properties": {
+        "是否了解调解作为非诉讼纠纷解决方式，能及时、高效、低成本、不伤和气地解决纠纷": {
+          "description": "本项对调解的了解程度；仅提取选择，固定告知文字不代表本人选择。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "$ref": "#/$defs/understanding",
+          "x-source-row": 43
+        },
+        "是否了解先行调解解决纠纷的好处": {
+          "type": "object",
+          "properties": {
+            "1.调解启动与诉讼排期": {
+              "description": "独立提取本项了解程度。告知原文：立案后选择先行调解的，可以很快启动调解程序。如不同意调解，法院将依程序开庭审理案件，但可能需要经过较长一段时间的排期等待，且审理、执行周期相对较长。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/understanding",
+              "x-key-status": "proposed_summary_key",
+              "x-source-label": "立案后选择先行调解的，可以很快启动调解程序。如不同意调解，法院将依程序开庭审理案件，但可能需要经过较长一段时间的排期等待，且审理、执行周期相对较长。"
+            },
+            "2.调解相关诉讼费用": {
+              "description": "独立提取本项了解程度。告知原文：选择先行调解，调解成功且自动履行的免交诉讼费用，申请司法确认的不交纳诉讼费用，要求出具调解书的减半交纳诉讼费用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/understanding",
+              "x-key-status": "proposed_summary_key",
+              "x-source-label": "选择先行调解，调解成功且自动履行的免交诉讼费用，申请司法确认的不交纳诉讼费用，要求出具调解书的减半交纳诉讼费用。"
+            },
+            "3.更换调解组织和调解员": {
+              "description": "独立提取本项了解程度。告知原文：首次调解不成功，但仍有继续调解意愿的，可以选择更换调解组织和调解员再进行调解。调解无法达成一致意见的，法院将依程序排期开庭。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/understanding",
+              "x-key-status": "proposed_summary_key",
+              "x-source-label": "首次调解不成功，但仍有继续调解意愿的，可以选择更换调解组织和调解员再进行调解。调解无法达成一致意见的，法院将依程序排期开庭。"
+            },
+            "4.调解保密性": {
+              "description": "独立提取本项了解程度。告知原文：依照法律规定，调解具有保密性要求，调解过程不公开，调解协议未经当事人同意不得公开。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/understanding",
+              "x-key-status": "proposed_summary_key",
+              "x-source-label": "依照法律规定，调解具有保密性要求，调解过程不公开，调解协议未经当事人同意不得公开。"
+            },
+            "5.调解协议效力": {
+              "description": "独立提取本项了解程度。告知原文：调解达成的协议具有法律效力，可以依照法律规定申请司法确认，具有强制执行效力。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+              "$ref": "#/$defs/understanding",
+              "x-key-status": "proposed_summary_key",
+              "x-source-label": "调解达成的协议具有法律效力，可以依照法律规定申请司法确认，具有强制执行效力。"
+            }
+          },
+          "required": [
+            "1.调解启动与诉讼排期",
+            "2.调解相关诉讼费用",
+            "3.更换调解组织和调解员",
+            "4.调解保密性",
+            "5.调解协议效力"
+          ],
+          "additionalProperties": false,
+          "x-source-row": 44
+        },
+        "是否考虑先行调解": {
+          "description": "是否考虑先行调解；不从了解选项反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "$ref": "#/$defs/mediationIntent",
+          "x-source-row": 45
+        }
+      },
+      "required": [
+        "是否了解调解作为非诉讼纠纷解决方式，能及时、高效、低成本、不伤和气地解决纠纷",
+        "是否了解先行调解解决纠纷的好处",
+        "是否考虑先行调解"
+      ],
+      "additionalProperties": false,
+      "description": "七个独立选择组；告知文字仅作为模板标签，不作为法律结论验证。",
+      "x-module": "remaining"
+    },
+    "签署信息": {
+      "type": "object",
+      "properties": {
+        "具状人": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "description": "仅提取具状人签字盖章位置实际填写的名称；不能从原告姓名自动补齐。 未提及时为 null。",
+          "uniqueItems": true
+        },
+        "日期": {
+          "description": "仅提取落款实际日期；不能用制文日期或运行当天日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        }
+      },
+      "required": [
+        "具状人",
+        "日期"
+      ],
+      "additionalProperties": false,
+      "description": "签署位置为空时各值为 null。",
+      "x-module": "remaining"
+    }
+  },
+  "required": [
+    "原告",
+    "被告",
+    "第三人",
+    "委托诉讼代理人",
+    "诉讼请求",
+    "约定管辖和诉前保全",
+    "事实与理由",
+    "对纠纷解决方式的意愿",
+    "签署信息"
+  ],
+  "additionalProperties": false,
+  "description": "民间借贷要素式起诉状正式字段初版；结构对象固定存在，叶子及重复记录可为null。",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:yaosushi:loan-complaint:v0.1",
+  "title": "民间借贷要素式起诉状字段初版",
+  "$defs": {
+    "yesNo": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "是",
+        "否",
+        null
+      ],
+      "description": "是否类单选；空白不等于否。"
+    },
+    "hasNone": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "有",
+        "无",
+        null
+      ],
+      "description": "有无类单选；未勾选不等于无。"
+    },
+    "sex": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "男",
+        "女",
+        null
+      ],
+      "description": "模板列出的性别选项；不从姓名或证件号码推导。"
+    },
+    "ownership": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "国有",
+        "民营",
+        "其他",
+        null
+      ],
+      "description": "所有制主选项；其他说明分开存储。单选为初步业务约定，需确认。"
+    },
+    "authorization": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "一般授权",
+        "特别授权",
+        null
+      ],
+      "description": "同一代理记录的代理权限按单选处理。"
+    },
+    "ratePeriod": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "年",
+        "季",
+        "月",
+        null
+      ],
+      "description": "利率周期，不能默认为年。"
+    },
+    "guaranteeType": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "一般保证",
+        "连带责任保证",
+        null
+      ],
+      "description": "单份保证合同的保证方式按单选处理；不同合同需后续扩展为重复记录。"
+    },
+    "understanding": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "了解",
+        "不了解",
+        null
+      ],
+      "description": "每个告知事项分别取值，不能由某一项推及其他项。"
+    },
+    "mediationIntent": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "是",
+        "否",
+        "暂不确定，想要了解更多内容",
+        null
+      ],
+      "description": "保留调解意愿的三个选项。"
+    },
+    "naturalPersonData": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "当前自然人姓名；与当前角色及当前记录绑定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "sex": {
+          "description": "当前自然人性别；仅依据明确文字或可靠勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "$ref": "#/$defs/sex"
+        },
+        "birthDate": {
+          "description": "当前自然人明确提供的完整出生日期，标准化为 YYYY-MM-DD；不从身份证反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "ethnicity": {
+          "description": "当前自然人民族，保留原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "workUnit": {
+          "description": "当前自然人工作单位，不能使用对方单位补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "position": {
+          "description": "当前自然人在工作单位中的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "phone": {
+          "description": "当前自然人联系电话；兼容既有接口为字符串，多号码保留原文分隔顺序，不转换为数字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "residence": {
+          "description": "当前自然人的住所地即户籍所在地；不得与经常居住地混用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "habitualResidence": {
+          "description": "当前自然人的经常居住地；不得仅复制住所地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "certificateType": {
+          "description": "证件类型；只提取原文明示名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "certificateNumber": {
+          "description": "证件号码，保留字符串、前导零及末尾字母；不自行补全。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      },
+      "required": [
+        "name",
+        "sex",
+        "birthDate",
+        "ethnicity",
+        "workUnit",
+        "position",
+        "phone",
+        "residence",
+        "habitualResidence",
+        "certificateType",
+        "certificateNumber"
+      ],
+      "additionalProperties": false,
+      "description": "自然人数据结构；所有属性都必须出现，缺失值为 null。"
+    },
+    "organizationData": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "当前法人或非法人组织的名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "residence": {
+          "description": "组织住所地或主要办事机构所在地；不同于注册地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "registrationPlace": {
+          "description": "组织注册地或登记地；不从住所地自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "legalRep": {
+          "description": "法定代表人或主要负责人姓名；不是委托诉讼代理人。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "position": {
+          "description": "法定代表人或主要负责人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "phone": {
+          "description": "组织栏内联系电话，兼容既有接口保存字符串，不默认归为代表人私人号码。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "creditCode": {
+          "description": "统一社会信用代码，保留原始字符串，不能生成或修复缺失位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "type": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "enum": [
+              "有限责任公司",
+              "股份有限公司",
+              "上市公司",
+              "其他企业法人",
+              "事业单位",
+              "社会团体",
+              "基金会",
+              "社会服务机构",
+              "机关法人",
+              "农村集体经济组织法人",
+              "城镇农村的合作经济组织法人",
+              "基层群众性自治组织法人",
+              "个人独资企业",
+              "合伙企业",
+              "不具有法人资格的专业服务机构"
+            ]
+          },
+          "minItems": 1,
+          "description": "组织类型；只存已选或明确表述的选项，不逐项输出布尔值。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+          "uniqueItems": true,
+          "x-enum-group": "orgType"
+        },
+        "ownership": {
+          "description": "组织所有制主选项；如其他集体所有制，主值其他、说明集体所有制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "$ref": "#/$defs/ownership"
+        },
+        "ownershipOther": {
+          "description": "所有制其他的附加说明；仅在 ownership 为其他时允许非空。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "stateOwnershipType": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "enum": [
+              "控股",
+              "参股"
+            ]
+          },
+          "minItems": 1,
+          "description": "国有项下控股、参股子选项；仅 ownership 为国有时允许非空。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+          "uniqueItems": true,
+          "x-enum-group": "stateOwnershipType"
+        }
+      },
+      "required": [
+        "name",
+        "residence",
+        "registrationPlace",
+        "legalRep",
+        "position",
+        "phone",
+        "creditCode",
+        "type",
+        "ownership",
+        "ownershipOther",
+        "stateOwnershipType"
+      ],
+      "additionalProperties": false,
+      "description": "法人和非法人组织的数据结构。",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "ownershipOther": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "ownershipOther"
+            ]
+          },
+          "then": {
+            "properties": {
+              "ownership": {
+                "const": "其他"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "stateOwnershipType": {
+                "type": "array"
+              }
+            },
+            "required": [
+              "stateOwnershipType"
+            ]
+          },
+          "then": {
+            "properties": {
+              "ownership": {
+                "const": "国有"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "party": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "自然人"
+            },
+            "data": {
+              "$ref": "#/$defs/naturalPersonData"
+            }
+          },
+          "required": [
+            "category",
+            "data"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "category": {
+              "const": "法人、非法人组织"
+            },
+            "data": {
+              "$ref": "#/$defs/organizationData"
+            }
+          },
+          "required": [
+            "category",
+            "data"
+          ],
+          "additionalProperties": false
+        }
+      ],
+      "description": "按category选择唯一data结构，不输出空白模板占位主体。"
+    }
+  }
+}

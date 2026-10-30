@@ -1,0 +1,425 @@
+{
+  "subjectIndex": [
+    {
+      "subjectId": "P1",
+      "role": "原告",
+      "entityType": "自然人",
+      "name": "林晓雨",
+      "aliases": [
+        "原告"
+      ],
+      "outputPointer": "/原告/0",
+      "sourceRefs": [
+        {
+          "fileContextIndex": 0,
+          "charStart": 29,
+          "charEnd": 105,
+          "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。"
+        }
+      ]
+    },
+    {
+      "subjectId": "P2",
+      "role": "被告",
+      "entityType": "自然人",
+      "name": "周文博",
+      "aliases": [
+        "被告"
+      ],
+      "outputPointer": "/被告/0",
+      "sourceRefs": [
+        {
+          "fileContextIndex": 0,
+          "charStart": 105,
+          "charEnd": 181,
+          "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。"
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "fieldPath": "/原告/0/data/name",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/sex",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/birthDate",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/ethnicity",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/phone",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/residence",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/certificateType",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/certificateNumber",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/name",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/sex",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/birthDate",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/ethnicity",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/phone",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/residence",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/certificateType",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/certificateNumber",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/委托诉讼代理人/是否委托",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 693,
+      "charEnd": 703,
+      "quote": "委托诉讼代理人：无。",
+      "kind": "negative",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/诉讼请求/1.本金/尚欠本金",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 394,
+      "charEnd": 460,
+      "quote": "诉讼请求：一、判令被告偿还借款本金人民币35000元；二、判令本案诉讼费用由被告承担。本案仅主张借款本金，不主张借期利息及逾期利息。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/诉讼请求/1.本金/币种",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 394,
+      "charEnd": 460,
+      "quote": "诉讼请求：一、判令被告偿还借款本金人民币35000元；二、判令本案诉讼费用由被告承担。本案仅主张借款本金，不主张借期利息及逾期利息。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/诉讼请求/6.是否主张诉讼费用",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 394,
+      "charEnd": 460,
+      "quote": "诉讼请求：一、判令被告偿还借款本金人民币35000元；二、判令本案诉讼费用由被告承担。本案仅主张借款本金，不主张借期利息及逾期利息。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/2.签订主体/出借人",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：林晓雨，女，汉族，1996年11月8日出生，公民身份号码：【原告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/2.签订主体/借款人",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：周文博，男，汉族，1993年4月12日出生，公民身份号码：【被告身份证号码】，住所地：江苏省南京市鼓楼区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/3.借款金额/约定",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/3.借款金额/实际提供",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/3.借款金额/提供方式",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/4.借款期限/是否到期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/4.借款期限/约定起始日期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/4.借款期限/约定截止日期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/6.借款提供时间/0/提供日期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/6.借款提供时间/0/金额",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/7.还款方式/方式",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "derived",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/9.是否存在逾期还款/是否存在",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/9.是否存在逾期还款/逾期起始日期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 252,
+      "charEnd": 267,
+      "quote": "2025年9月6日前一次性归还",
+      "kind": "derived",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/18.证据清单（可另附页）",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 521,
+      "charEnd": 634,
+      "quote": "证据和证据来源：一、双方微信聊天记录，来源于原告保存的原始电子数据，证明借款合意、还款期限及被告对欠款的确认；二、银行转账凭证及流水，来源于原告银行账户记录，证明35000元已经交付被告；三、双方身份信息材料，证明当事人身份。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/对纠纷解决方式的意愿/是否了解调解作为非诉讼纠纷解决方式，能及时、高效、低成本、不伤和气地解决纠纷",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 703,
+      "charEnd": 718,
+      "quote": "调解意愿：了解并愿意接受调解。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/对纠纷解决方式的意愿/是否考虑先行调解",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 703,
+      "charEnd": 718,
+      "quote": "调解意愿：了解并愿意接受调解。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/签署信息/具状人",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 653,
+      "charEnd": 693,
+      "quote": "具状人：林晓雨。签名及日期待填写。附件：起诉状副本1份，证据材料按证据目录另附。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/1.合同的签订情况（名称、编号、签订时间、地点等）/签订时间",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 394,
+      "quote": "原告与被告原系恋爱关系。2025年3月6日，被告以支付房屋装修费用为由向原告借款人民币35000元，双方通过微信明确该款项属于借款，被告承诺于2025年9月6日前一次性归还，双方未约定借期利息及逾期利息。原告于当日通过银行转账向被告支付35000元。双方未签订书面借款合同，但被告在收款后的微信聊天中确认已收到借款，并再次承诺按期归还。还款期限届满后，被告未偿还任何款项。原告催款时，被告认可尚欠本金35000元，后仍未支付。",
+      "kind": "explicit",
+      "confidence": 0.99
+    }
+  ],
+  "conflicts": [],
+  "missing": [],
+  "warnings": []
+}

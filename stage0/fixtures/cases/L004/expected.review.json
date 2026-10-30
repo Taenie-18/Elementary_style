@@ -1,0 +1,435 @@
+{
+  "subjectIndex": [
+    {
+      "subjectId": "P1",
+      "role": "原告",
+      "entityType": "自然人",
+      "name": "许安宁",
+      "aliases": [
+        "原告"
+      ],
+      "outputPointer": "/原告/0",
+      "sourceRefs": [
+        {
+          "fileContextIndex": 0,
+          "charStart": 29,
+          "charEnd": 105,
+          "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。"
+        }
+      ]
+    },
+    {
+      "subjectId": "P2",
+      "role": "被告",
+      "entityType": "自然人",
+      "name": "何文杰",
+      "aliases": [
+        "被告"
+      ],
+      "outputPointer": "/被告/0",
+      "sourceRefs": [
+        {
+          "fileContextIndex": 0,
+          "charStart": 105,
+          "charEnd": 181,
+          "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。"
+        }
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "fieldPath": "/原告/0/data/name",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/sex",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/birthDate",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/ethnicity",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/phone",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/residence",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/certificateType",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/原告/0/data/certificateNumber",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/name",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/sex",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/birthDate",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/ethnicity",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/phone",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/residence",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/certificateType",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/被告/0/data/certificateNumber",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/委托诉讼代理人/是否委托",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 712,
+      "charEnd": 722,
+      "quote": "委托诉讼代理人：无。",
+      "kind": "negative",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/诉讼请求/1.本金/尚欠本金",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 402,
+      "charEnd": 463,
+      "quote": "诉讼请求：一、判令被告偿还借款本金人民币20000元；二、判令本案诉讼费用由被告承担。本案仅主张剩余借款本金，不主张利息。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/诉讼请求/1.本金/币种",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 402,
+      "charEnd": 463,
+      "quote": "诉讼请求：一、判令被告偿还借款本金人民币20000元；二、判令本案诉讼费用由被告承担。本案仅主张剩余借款本金，不主张利息。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/诉讼请求/6.是否主张诉讼费用",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 402,
+      "charEnd": 463,
+      "quote": "诉讼请求：一、判令被告偿还借款本金人民币20000元；二、判令本案诉讼费用由被告承担。本案仅主张剩余借款本金，不主张利息。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/2.签订主体/出借人",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 29,
+      "charEnd": 105,
+      "quote": "原告：许安宁，女，汉族，1994年3月25日出生，公民身份号码：【原告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【原告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/2.签订主体/借款人",
+      "subjectId": "P2",
+      "fileContextIndex": 0,
+      "charStart": 105,
+      "charEnd": 181,
+      "quote": "被告：何文杰，男，汉族，1991年9月14日出生，公民身份号码：【被告身份证号码】，住所地：湖北省武汉市洪山区【详细地址】，联系电话：【被告联系电话】。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/3.借款金额/约定",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/3.借款金额/实际提供",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/3.借款金额/提供方式",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/4.借款期限/是否到期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/4.借款期限/约定起始日期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/4.借款期限/约定截止日期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/6.借款提供时间/0/提供日期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/6.借款提供时间/0/金额",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/7.还款方式/方式",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "derived",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/8.还款情况/已还本金",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/9.是否存在逾期还款/是否存在",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/9.是否存在逾期还款/逾期起始日期",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 333,
+      "charEnd": 350,
+      "quote": "2025年6月30日前归还全部本金",
+      "kind": "derived",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/18.证据清单（可另附页）",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 532,
+      "charEnd": 653,
+      "quote": "证据和证据来源：一、银行转账凭证及账户流水，来源于原告银行账户记录，证明借款交付及8000元还款情况；二、微信聊天记录，来源于原告保存的原始电子数据，证明被告确认借款性质、双方确定还款期限及后续催告情况；三、双方身份信息材料，证明当事人身份。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/对纠纷解决方式的意愿/是否了解调解作为非诉讼纠纷解决方式，能及时、高效、低成本、不伤和气地解决纠纷",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 722,
+      "charEnd": 737,
+      "quote": "调解意愿：了解并愿意接受调解。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/对纠纷解决方式的意愿/是否考虑先行调解",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 722,
+      "charEnd": 737,
+      "quote": "调解意愿：了解并愿意接受调解。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/签署信息/具状人",
+      "subjectId": "P1",
+      "fileContextIndex": 0,
+      "charStart": 672,
+      "charEnd": 712,
+      "quote": "具状人：许安宁。签名及日期待填写。附件：起诉状副本1份，证据材料按证据目录另附。",
+      "kind": "explicit",
+      "confidence": 0.99
+    },
+    {
+      "fieldPath": "/事实与理由/1.合同的签订情况（名称、编号、签订时间、地点等）/签订时间",
+      "subjectId": null,
+      "fileContextIndex": 0,
+      "charStart": 181,
+      "charEnd": 402,
+      "quote": "原告与被告系亲属关系。2024年11月20日，被告因支付家庭生活费用向原告借款人民币28000元，双方口头约定借款，但未明确还款期限，也未约定利息。原告于当日通过银行转账向被告支付28000元。2025年5月10日，原告通过微信要求被告返还借款，被告确认收到的28000元系借款，并与原告协商一致，承诺于2025年6月30日前归还全部本金。2025年6月30日，被告偿还本金8000元，剩余本金20000元未支付。原告此后催告，被告仍未归还。",
+      "kind": "explicit",
+      "confidence": 0.99
+    }
+  ],
+  "conflicts": [],
+  "missing": [],
+  "warnings": []
+}

@@ -1,0 +1,25 @@
+{
+  "sourceTableRows": 46,
+  "fieldConfigurations": 160,
+  "fieldCountDefinition": "按最终角色路径及category分支展开后的可填值；不含固定category、结构容器和运行参数。",
+  "fieldConfigurationsByModule": {
+    "parties": 72,
+    "claims": 22,
+    "remaining": 15,
+    "facts": 51
+  },
+  "enumGroups": 15,
+  "organizationTypeOptions": 15,
+  "mediationChoiceGroups": 7,
+  "topLevelKeys": [
+    "原告",
+    "被告",
+    "第三人",
+    "委托诉讼代理人",
+    "诉讼请求",
+    "约定管辖和诉前保全",
+    "事实与理由",
+    "对纠纷解决方式的意愿",
+    "签署信息"
+  ]
+}

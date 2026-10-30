@@ -1,0 +1,290 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:yaosushi:stage0:review:v0.1",
+  "title": "抽取审核信息",
+  "description": "与业务 data 一起返回的审核信息。subjectIndex 的结构必须与 subject-index.schema.json 保持同步；本文件为自包含校验做了内联定义。",
+  "type": "object",
+  "required": [
+    "subjectIndex",
+    "evidence",
+    "conflicts",
+    "missing",
+    "warnings"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "subjectIndex": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/subject"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence"
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/conflict"
+      }
+    },
+    "missing": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^/"
+      },
+      "uniqueItems": true,
+      "description": "关键字段或关键证据缺失的字段路径。"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/warning"
+      }
+    }
+  },
+  "$defs": {
+    "subject": {
+      "type": "object",
+      "required": [
+        "subjectId",
+        "role",
+        "entityType",
+        "name",
+        "aliases",
+        "outputPointer",
+        "sourceRefs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "subjectId": {
+          "type": "string",
+          "pattern": "^[A-Z]+[0-9]+$"
+        },
+        "role": {
+          "enum": [
+            "原告",
+            "被告",
+            "第三人",
+            "委托诉讼代理人"
+          ]
+        },
+        "entityType": {
+          "enum": [
+            "自然人",
+            "法人、非法人组织"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "outputPointer": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "principalIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]+[0-9]+$"
+          },
+          "uniqueItems": true
+        },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          }
+        }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": [
+        "fileContextIndex",
+        "charStart",
+        "charEnd",
+        "quote"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "fileContextIndex": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "charStart": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "charEnd": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "fieldPath",
+        "fileContextIndex",
+        "charStart",
+        "charEnd",
+        "quote",
+        "kind"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "fieldPath": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "subjectId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Z]+[0-9]+$"
+        },
+        "fileContextIndex": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "charStart": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "charEnd": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "explicit",
+            "negative",
+            "derived"
+          ]
+        },
+        "confidence": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "conflict": {
+      "type": "object",
+      "required": [
+        "fieldPath",
+        "candidates",
+        "message"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "fieldPath": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "subjectId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Z]+[0-9]+$"
+        },
+        "candidates": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": [
+              "value",
+              "evidence"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "value": {},
+              "evidence": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/evidence"
+                }
+              }
+            }
+          }
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "warning": {
+      "type": "object",
+      "required": [
+        "code",
+        "message",
+        "severity"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_]+$"
+        },
+        "fieldPath": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^/"
+        },
+        "subjectId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Z]+[0-9]+$"
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning"
+          ]
+        }
+      }
+    }
+  }
+}

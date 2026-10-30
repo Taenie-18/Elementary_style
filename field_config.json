@@ -1,0 +1,5657 @@
+{
+  "templateId": "private_lending_complaint",
+  "schemaVersion": "0.1.0",
+  "status": "initial_for_review",
+  "sourceFile": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+  "schemaFile": "loan_complaint.schema.json",
+  "contract": {
+    "topLevelKeys": [
+      "原告",
+      "被告",
+      "第三人",
+      "委托诉讼代理人",
+      "诉讼请求",
+      "约定管辖和诉前保全",
+      "事实与理由",
+      "对纠纷解决方式的意愿",
+      "签署信息"
+    ],
+    "partyShape": "category + data",
+    "leafPropertiesAlwaysPresent": true,
+    "missingValue": null,
+    "emptyArraysAllowed": false,
+    "money": "decimal string with exactly 2 digits after decimal point",
+    "date": "YYYY-MM-DD; incomplete dates retained in raw text or review evidence",
+    "phone": "string; retain multiple numbers and original separator",
+    "auditInBusinessResult": false
+  },
+  "sourceAuthority": {
+    "formalLabels": "attachment",
+    "englishPartyKeys": "user example plus proposed mappings for missing fields",
+    "newSubfields": "engineering decomposition of source cells; initial mapping, not claimed to be existing source identifiers",
+    "numbering": "retain source 1-8, 1-2 and 1-18; trim layout spaces only"
+  },
+  "globalRules": [
+    "仅抽取输入事实，模板说明、枚举展示及固定占位文字不是案件事实。",
+    "已填文本与可靠勾选均可提供依据；专栏空白时可从案件正文提取明示值。",
+    "多来源冲突不静默选值，相关字段返回null，候选值、来源和主体标识进入独立review。",
+    "仅空白、全部未选、没有相关叙述时为null；未选不等于否、无或0。",
+    "选项组不允许重复，不输出空数组或字符串null。",
+    "不从身份号码推导出生日期或性别；不以当前日期填入落款、截止日或逾期时长。",
+    "不把诉请利率标准当成合同约定利率，不把计息起算日当成借款到期日。",
+    "其他项附加说明与该选项关联；选择其他但未提供说明时说明仍为null并按需复核。",
+    "共享主体ID仅保存在内部索引和review，正式JSON不强行增加partyId。",
+    "category表示数据结构类型，不表示原告被告等诉讼角色。"
+  ],
+  "enumGroups": {
+    "yesNo": {
+      "values": [
+        "是",
+        "否"
+      ],
+      "selection": "single",
+      "description": "是否类单选；空白不等于否。"
+    },
+    "hasNone": {
+      "values": [
+        "有",
+        "无"
+      ],
+      "selection": "single",
+      "description": "有无类单选；未勾选不等于无。"
+    },
+    "sex": {
+      "values": [
+        "男",
+        "女"
+      ],
+      "selection": "single",
+      "description": "模板列出的性别选项；不从姓名或证件号码推导。"
+    },
+    "orgType": {
+      "values": [
+        "有限责任公司",
+        "股份有限公司",
+        "上市公司",
+        "其他企业法人",
+        "事业单位",
+        "社会团体",
+        "基金会",
+        "社会服务机构",
+        "机关法人",
+        "农村集体经济组织法人",
+        "城镇农村的合作经济组织法人",
+        "基层群众性自治组织法人",
+        "个人独资企业",
+        "合伙企业",
+        "不具有法人资格的专业服务机构"
+      ],
+      "selection": "multiple",
+      "description": "保留模板全部15项；组织形式与上市状态可能同时出现，首版按同组多选。"
+    },
+    "ownership": {
+      "values": [
+        "国有",
+        "民营",
+        "其他"
+      ],
+      "selection": "single",
+      "description": "所有制主选项；其他说明分开存储。单选为初步业务约定，需确认。"
+    },
+    "stateOwnershipType": {
+      "values": [
+        "控股",
+        "参股"
+      ],
+      "selection": "multiple",
+      "description": "国有之下的子选项；首版按多选保存，是否应互斥需业务确认。"
+    },
+    "authorization": {
+      "values": [
+        "一般授权",
+        "特别授权"
+      ],
+      "selection": "single",
+      "description": "同一代理记录的代理权限按单选处理。"
+    },
+    "acceleration": {
+      "values": [
+        "提前还款（加速到期）",
+        "解除合同"
+      ],
+      "selection": "multiple",
+      "description": "模板以斜杠分隔，是否允许并选未明；首版多选，进入待确认清单。"
+    },
+    "deliveryMethod": {
+      "values": [
+        "现金",
+        "转账",
+        "其他"
+      ],
+      "selection": "multiple",
+      "description": "允许多次交付采用多种方式；其他说明关联其他选项。"
+    },
+    "repaymentMethod": {
+      "values": [
+        "到期一次性还本付息",
+        "按月计息、到期一次性还本",
+        "按季计息、到期一次性还本",
+        "按年计息、到期一次性还本",
+        "其他"
+      ],
+      "selection": "multiple",
+      "description": "模板未声明互斥，首版保留多选；同一笔借款出现互斥安排时进入业务复核。"
+    },
+    "ratePeriod": {
+      "values": [
+        "年",
+        "季",
+        "月"
+      ],
+      "selection": "single",
+      "description": "利率周期，不能默认为年。"
+    },
+    "registrationType": {
+      "values": [
+        "正式登记",
+        "预告登记"
+      ],
+      "selection": "multiple",
+      "description": "模板登记子选项，可能对应多担保物；首版多选，需确认单个担保物建模要求。"
+    },
+    "guaranteeType": {
+      "values": [
+        "一般保证",
+        "连带责任保证"
+      ],
+      "selection": "single",
+      "description": "单份保证合同的保证方式按单选处理；不同合同需后续扩展为重复记录。"
+    },
+    "understanding": {
+      "values": [
+        "了解",
+        "不了解"
+      ],
+      "selection": "single",
+      "description": "每个告知事项分别取值，不能由某一项推及其他项。"
+    },
+    "mediationIntent": {
+      "values": [
+        "是",
+        "否",
+        "暂不确定，想要了解更多内容"
+      ],
+      "selection": "single",
+      "description": "保留调解意愿的三个选项。"
+    }
+  },
+  "modules": [
+    {
+      "id": "parties",
+      "paths": [
+        "/原告",
+        "/被告",
+        "/第三人",
+        "/委托诉讼代理人"
+      ]
+    },
+    {
+      "id": "claims",
+      "paths": [
+        "/诉讼请求"
+      ]
+    },
+    {
+      "id": "facts",
+      "paths": [
+        "/事实与理由"
+      ],
+      "optionalSplit": {
+        "factsA": "原文及1至9项",
+        "factsB": "10至18项",
+        "overlapAllowed": false
+      }
+    },
+    {
+      "id": "remaining",
+      "paths": [
+        "/约定管辖和诉前保全",
+        "/对纠纷解决方式的意愿",
+        "/签署信息"
+      ]
+    }
+  ],
+  "runtime": {
+    "workersDefault": 5,
+    "workersAllowed": [
+      4,
+      5
+    ],
+    "globalModelQuotaRequired": true,
+    "boundedSubmissionRequired": true,
+    "queueCapacity": null,
+    "requestTimeoutSeconds": null,
+    "retryLimit": 1,
+    "quotaIncludes": [
+      "subject_index",
+      "extraction",
+      "retry"
+    ]
+  },
+  "pendingDecisions": [
+    "国有控股与参股是否允许同时选择；首版保留多选。",
+    "提前还款与解除合同是否互斥；首版保留多选，不作为法律可并用结论。",
+    "还款方式及登记类型是否需要按借款或担保物拆分；首版保留同组多选并提示互斥复核。",
+    "多份保证合同、多担保物、不同代理委托关系是否需要升级为重复记录；首版不保证覆盖复杂多合同案件。",
+    "用户示例ownership其他集体所有制是否接受规范为其他加ownershipOther集体所有制。",
+    "本版phone保持字符串，多个号码后续是否升级为数组需接口版本变更。",
+    "金额十进制字符串及新增细分子字段名称需要下游确认。",
+    "本版不完整日期不补日，是否增加全局日期原文结构需确认。"
+  ],
+  "fields": [
+    {
+      "fieldId": "F001",
+      "outputPath": "/原告/*/data/name",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/name",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人姓名；与当前角色及当前记录绑定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人姓名；与当前角色及当前记录绑定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F002",
+      "outputPath": "/原告/*/data/sex",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/sex",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人性别；仅依据明确文字或可靠勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "男",
+          "女",
+          null
+        ],
+        "description": "当前自然人性别；仅依据明确文字或可靠勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F003",
+      "outputPath": "/原告/*/data/birthDate",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/birthDate",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人明确提供的完整出生日期，标准化为 YYYY-MM-DD；不从身份证反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人明确提供的完整出生日期，标准化为 YYYY-MM-DD；不从身份证反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F004",
+      "outputPath": "/原告/*/data/ethnicity",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/ethnicity",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人民族，保留原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人民族，保留原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F005",
+      "outputPath": "/原告/*/data/workUnit",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/workUnit",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人工作单位，不能使用对方单位补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人工作单位，不能使用对方单位补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F006",
+      "outputPath": "/原告/*/data/position",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/position",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人在工作单位中的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人在工作单位中的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F007",
+      "outputPath": "/原告/*/data/phone",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/phone",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人联系电话；兼容既有接口为字符串，多号码保留原文分隔顺序，不转换为数字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人联系电话；兼容既有接口为字符串，多号码保留原文分隔顺序，不转换为数字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F008",
+      "outputPath": "/原告/*/data/residence",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/residence",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人的住所地即户籍所在地；不得与经常居住地混用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人的住所地即户籍所在地；不得与经常居住地混用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F009",
+      "outputPath": "/原告/*/data/habitualResidence",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/habitualResidence",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人的经常居住地；不得仅复制住所地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人的经常居住地；不得仅复制住所地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F010",
+      "outputPath": "/原告/*/data/certificateType",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/certificateType",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "证件类型；只提取原文明示名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "证件类型；只提取原文明示名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F011",
+      "outputPath": "/原告/*/data/certificateNumber",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/certificateNumber",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          3
+        ],
+        "labels": [
+          "原告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "证件号码，保留字符串、前导零及末尾字母；不自行补全。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "证件号码，保留字符串、前导零及末尾字母；不自行补全。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F012",
+      "outputPath": "/原告/*/data/name",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/name",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前法人或非法人组织的名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前法人或非法人组织的名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F013",
+      "outputPath": "/原告/*/data/residence",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/residence",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织住所地或主要办事机构所在地；不同于注册地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "组织住所地或主要办事机构所在地；不同于注册地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F014",
+      "outputPath": "/原告/*/data/registrationPlace",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/registrationPlace",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织注册地或登记地；不从住所地自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "组织注册地或登记地；不从住所地自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F015",
+      "outputPath": "/原告/*/data/legalRep",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/legalRep",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "法定代表人或主要负责人姓名；不是委托诉讼代理人。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "法定代表人或主要负责人姓名；不是委托诉讼代理人。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F016",
+      "outputPath": "/原告/*/data/position",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/position",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "法定代表人或主要负责人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "法定代表人或主要负责人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F017",
+      "outputPath": "/原告/*/data/phone",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/phone",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织栏内联系电话，兼容既有接口保存字符串，不默认归为代表人私人号码。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "组织栏内联系电话，兼容既有接口保存字符串，不默认归为代表人私人号码。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F018",
+      "outputPath": "/原告/*/data/creditCode",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/creditCode",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "统一社会信用代码，保留原始字符串，不能生成或修复缺失位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "统一社会信用代码，保留原始字符串，不能生成或修复缺失位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F019",
+      "outputPath": "/原告/*/data/type",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/type",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织类型；只存已选或明确表述的选项，不逐项输出布尔值。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "有限责任公司",
+            "股份有限公司",
+            "上市公司",
+            "其他企业法人",
+            "事业单位",
+            "社会团体",
+            "基金会",
+            "社会服务机构",
+            "机关法人",
+            "农村集体经济组织法人",
+            "城镇农村的合作经济组织法人",
+            "基层群众性自治组织法人",
+            "个人独资企业",
+            "合伙企业",
+            "不具有法人资格的专业服务机构"
+          ]
+        },
+        "minItems": 1,
+        "description": "组织类型；只存已选或明确表述的选项，不逐项输出布尔值。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F020",
+      "outputPath": "/原告/*/data/ownership",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/ownership",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织所有制主选项；如其他集体所有制，主值其他、说明集体所有制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "国有",
+          "民营",
+          "其他",
+          null
+        ],
+        "description": "组织所有制主选项；如其他集体所有制，主值其他、说明集体所有制。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F021",
+      "outputPath": "/原告/*/data/ownershipOther",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/ownershipOther",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "所有制其他的附加说明；仅在 ownership 为其他时允许非空。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "所有制其他的附加说明；仅在 ownership 为其他时允许非空。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F022",
+      "outputPath": "/原告/*/data/stateOwnershipType",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/stateOwnershipType",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          4
+        ],
+        "labels": [
+          "原告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "国有项下控股、参股子选项；仅 ownership 为国有时允许非空。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "控股",
+            "参股"
+          ]
+        },
+        "minItems": 1,
+        "description": "国有项下控股、参股子选项；仅 ownership 为国有时允许非空。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F023",
+      "outputPath": "/被告/*/data/name",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/name",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人姓名；与当前角色及当前记录绑定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人姓名；与当前角色及当前记录绑定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F024",
+      "outputPath": "/被告/*/data/sex",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/sex",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人性别；仅依据明确文字或可靠勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "男",
+          "女",
+          null
+        ],
+        "description": "当前自然人性别；仅依据明确文字或可靠勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F025",
+      "outputPath": "/被告/*/data/birthDate",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/birthDate",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人明确提供的完整出生日期，标准化为 YYYY-MM-DD；不从身份证反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人明确提供的完整出生日期，标准化为 YYYY-MM-DD；不从身份证反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F026",
+      "outputPath": "/被告/*/data/ethnicity",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/ethnicity",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人民族，保留原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人民族，保留原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F027",
+      "outputPath": "/被告/*/data/workUnit",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/workUnit",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人工作单位，不能使用对方单位补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人工作单位，不能使用对方单位补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F028",
+      "outputPath": "/被告/*/data/position",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/position",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人在工作单位中的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人在工作单位中的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F029",
+      "outputPath": "/被告/*/data/phone",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/phone",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人联系电话；兼容既有接口为字符串，多号码保留原文分隔顺序，不转换为数字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人联系电话；兼容既有接口为字符串，多号码保留原文分隔顺序，不转换为数字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F030",
+      "outputPath": "/被告/*/data/residence",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/residence",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人的住所地即户籍所在地；不得与经常居住地混用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人的住所地即户籍所在地；不得与经常居住地混用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F031",
+      "outputPath": "/被告/*/data/habitualResidence",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/habitualResidence",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人的经常居住地；不得仅复制住所地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人的经常居住地；不得仅复制住所地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F032",
+      "outputPath": "/被告/*/data/certificateType",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/certificateType",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "证件类型；只提取原文明示名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "证件类型；只提取原文明示名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F033",
+      "outputPath": "/被告/*/data/certificateNumber",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/certificateNumber",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          6
+        ],
+        "labels": [
+          "被告（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "证件号码，保留字符串、前导零及末尾字母；不自行补全。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "证件号码，保留字符串、前导零及末尾字母；不自行补全。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F034",
+      "outputPath": "/被告/*/data/name",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/name",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前法人或非法人组织的名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前法人或非法人组织的名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F035",
+      "outputPath": "/被告/*/data/residence",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/residence",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织住所地或主要办事机构所在地；不同于注册地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "组织住所地或主要办事机构所在地；不同于注册地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F036",
+      "outputPath": "/被告/*/data/registrationPlace",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/registrationPlace",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织注册地或登记地；不从住所地自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "组织注册地或登记地；不从住所地自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F037",
+      "outputPath": "/被告/*/data/legalRep",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/legalRep",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "法定代表人或主要负责人姓名；不是委托诉讼代理人。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "法定代表人或主要负责人姓名；不是委托诉讼代理人。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F038",
+      "outputPath": "/被告/*/data/position",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/position",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "法定代表人或主要负责人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "法定代表人或主要负责人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F039",
+      "outputPath": "/被告/*/data/phone",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/phone",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织栏内联系电话，兼容既有接口保存字符串，不默认归为代表人私人号码。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "组织栏内联系电话，兼容既有接口保存字符串，不默认归为代表人私人号码。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F040",
+      "outputPath": "/被告/*/data/creditCode",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/creditCode",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "统一社会信用代码，保留原始字符串，不能生成或修复缺失位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "统一社会信用代码，保留原始字符串，不能生成或修复缺失位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F041",
+      "outputPath": "/被告/*/data/type",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/type",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织类型；只存已选或明确表述的选项，不逐项输出布尔值。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "有限责任公司",
+            "股份有限公司",
+            "上市公司",
+            "其他企业法人",
+            "事业单位",
+            "社会团体",
+            "基金会",
+            "社会服务机构",
+            "机关法人",
+            "农村集体经济组织法人",
+            "城镇农村的合作经济组织法人",
+            "基层群众性自治组织法人",
+            "个人独资企业",
+            "合伙企业",
+            "不具有法人资格的专业服务机构"
+          ]
+        },
+        "minItems": 1,
+        "description": "组织类型；只存已选或明确表述的选项，不逐项输出布尔值。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F042",
+      "outputPath": "/被告/*/data/ownership",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/ownership",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织所有制主选项；如其他集体所有制，主值其他、说明集体所有制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "国有",
+          "民营",
+          "其他",
+          null
+        ],
+        "description": "组织所有制主选项；如其他集体所有制，主值其他、说明集体所有制。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F043",
+      "outputPath": "/被告/*/data/ownershipOther",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/ownershipOther",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "所有制其他的附加说明；仅在 ownership 为其他时允许非空。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "所有制其他的附加说明；仅在 ownership 为其他时允许非空。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F044",
+      "outputPath": "/被告/*/data/stateOwnershipType",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/stateOwnershipType",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          7
+        ],
+        "labels": [
+          "被告（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "国有项下控股、参股子选项；仅 ownership 为国有时允许非空。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "控股",
+            "参股"
+          ]
+        },
+        "minItems": 1,
+        "description": "国有项下控股、参股子选项；仅 ownership 为国有时允许非空。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F045",
+      "outputPath": "/第三人/*/data/name",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/name",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人姓名；与当前角色及当前记录绑定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人姓名；与当前角色及当前记录绑定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F046",
+      "outputPath": "/第三人/*/data/sex",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/sex",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人性别；仅依据明确文字或可靠勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "男",
+          "女",
+          null
+        ],
+        "description": "当前自然人性别；仅依据明确文字或可靠勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F047",
+      "outputPath": "/第三人/*/data/birthDate",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/birthDate",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人明确提供的完整出生日期，标准化为 YYYY-MM-DD；不从身份证反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人明确提供的完整出生日期，标准化为 YYYY-MM-DD；不从身份证反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F048",
+      "outputPath": "/第三人/*/data/ethnicity",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/ethnicity",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人民族，保留原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人民族，保留原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F049",
+      "outputPath": "/第三人/*/data/workUnit",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/workUnit",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人工作单位，不能使用对方单位补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人工作单位，不能使用对方单位补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F050",
+      "outputPath": "/第三人/*/data/position",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/position",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人在工作单位中的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人在工作单位中的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F051",
+      "outputPath": "/第三人/*/data/phone",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/phone",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人联系电话；兼容既有接口为字符串，多号码保留原文分隔顺序，不转换为数字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人联系电话；兼容既有接口为字符串，多号码保留原文分隔顺序，不转换为数字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F052",
+      "outputPath": "/第三人/*/data/residence",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/residence",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人的住所地即户籍所在地；不得与经常居住地混用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人的住所地即户籍所在地；不得与经常居住地混用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F053",
+      "outputPath": "/第三人/*/data/habitualResidence",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/habitualResidence",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前自然人的经常居住地；不得仅复制住所地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前自然人的经常居住地；不得仅复制住所地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F054",
+      "outputPath": "/第三人/*/data/certificateType",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/certificateType",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "证件类型；只提取原文明示名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "证件类型；只提取原文明示名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F055",
+      "outputPath": "/第三人/*/data/certificateNumber",
+      "categoryCondition": "自然人",
+      "schemaPointer": "#/$defs/naturalPersonData/properties/certificateNumber",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          8
+        ],
+        "labels": [
+          "第三人（自然人）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "证件号码，保留字符串、前导零及末尾字母；不自行补全。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "证件号码，保留字符串、前导零及末尾字母；不自行补全。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F056",
+      "outputPath": "/第三人/*/data/name",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/name",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "当前法人或非法人组织的名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "当前法人或非法人组织的名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F057",
+      "outputPath": "/第三人/*/data/residence",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/residence",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织住所地或主要办事机构所在地；不同于注册地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "组织住所地或主要办事机构所在地；不同于注册地。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F058",
+      "outputPath": "/第三人/*/data/registrationPlace",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/registrationPlace",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织注册地或登记地；不从住所地自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "组织注册地或登记地；不从住所地自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F059",
+      "outputPath": "/第三人/*/data/legalRep",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/legalRep",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "法定代表人或主要负责人姓名；不是委托诉讼代理人。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "法定代表人或主要负责人姓名；不是委托诉讼代理人。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F060",
+      "outputPath": "/第三人/*/data/position",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/position",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "法定代表人或主要负责人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "法定代表人或主要负责人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F061",
+      "outputPath": "/第三人/*/data/phone",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/phone",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织栏内联系电话，兼容既有接口保存字符串，不默认归为代表人私人号码。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "组织栏内联系电话，兼容既有接口保存字符串，不默认归为代表人私人号码。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F062",
+      "outputPath": "/第三人/*/data/creditCode",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/creditCode",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "统一社会信用代码，保留原始字符串，不能生成或修复缺失位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "统一社会信用代码，保留原始字符串，不能生成或修复缺失位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F063",
+      "outputPath": "/第三人/*/data/type",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/type",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织类型；只存已选或明确表述的选项，不逐项输出布尔值。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "有限责任公司",
+            "股份有限公司",
+            "上市公司",
+            "其他企业法人",
+            "事业单位",
+            "社会团体",
+            "基金会",
+            "社会服务机构",
+            "机关法人",
+            "农村集体经济组织法人",
+            "城镇农村的合作经济组织法人",
+            "基层群众性自治组织法人",
+            "个人独资企业",
+            "合伙企业",
+            "不具有法人资格的专业服务机构"
+          ]
+        },
+        "minItems": 1,
+        "description": "组织类型；只存已选或明确表述的选项，不逐项输出布尔值。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F064",
+      "outputPath": "/第三人/*/data/ownership",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/ownership",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "组织所有制主选项；如其他集体所有制，主值其他、说明集体所有制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "国有",
+          "民营",
+          "其他",
+          null
+        ],
+        "description": "组织所有制主选项；如其他集体所有制，主值其他、说明集体所有制。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F065",
+      "outputPath": "/第三人/*/data/ownershipOther",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/ownershipOther",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "所有制其他的附加说明；仅在 ownership 为其他时允许非空。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "所有制其他的附加说明；仅在 ownership 为其他时允许非空。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F066",
+      "outputPath": "/第三人/*/data/stateOwnershipType",
+      "categoryCondition": "法人、非法人组织",
+      "schemaPointer": "#/$defs/organizationData/properties/stateOwnershipType",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          9
+        ],
+        "labels": [
+          "第三人（法人、非法人组织）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "国有项下控股、参股子选项；仅 ownership 为国有时允许非空。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "控股",
+            "参股"
+          ]
+        },
+        "minItems": 1,
+        "description": "国有项下控股、参股子选项；仅 ownership 为国有时允许非空。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F067",
+      "outputPath": "/委托诉讼代理人/是否委托",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/hasNone",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          5
+        ],
+        "labels": [
+          "委托诉讼代理人"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否委托诉讼代理人；有、无均未选且无明确文字时为 null。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "有",
+          "无",
+          null
+        ],
+        "description": "是否委托诉讼代理人；有、无均未选且无明确文字时为 null。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F068",
+      "outputPath": "/委托诉讼代理人/代理人/*/name",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/委托诉讼代理人/properties/代理人/items/properties/name",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          5
+        ],
+        "labels": [
+          "委托诉讼代理人"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本条委托诉讼代理人的姓名。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "本条委托诉讼代理人的姓名。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F069",
+      "outputPath": "/委托诉讼代理人/代理人/*/workUnit",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/委托诉讼代理人/properties/代理人/items/properties/workUnit",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          5
+        ],
+        "labels": [
+          "委托诉讼代理人"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本条代理人的单位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "本条代理人的单位。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F070",
+      "outputPath": "/委托诉讼代理人/代理人/*/position",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/委托诉讼代理人/properties/代理人/items/properties/position",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          5
+        ],
+        "labels": [
+          "委托诉讼代理人"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本条代理人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "本条代理人的职务。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F071",
+      "outputPath": "/委托诉讼代理人/代理人/*/phone",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/委托诉讼代理人/properties/代理人/items/properties/phone",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          5
+        ],
+        "labels": [
+          "委托诉讼代理人"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本条代理人的联系电话，多个号码保留字符串。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "本条代理人的联系电话，多个号码保留字符串。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F072",
+      "outputPath": "/委托诉讼代理人/代理人/*/authorization",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/authorization",
+      "module": "parties",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          5
+        ],
+        "labels": [
+          "委托诉讼代理人"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本条代理人的一般授权或特别授权；不能由代理人职业推断。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "一般授权",
+          "特别授权",
+          null
+        ],
+        "description": "本条代理人的一般授权或特别授权；不能由代理人职业推断。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F073",
+      "outputPath": "/诉讼请求/诉讼请求原文",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/诉讼请求原文",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          11
+        ],
+        "labels": [
+          "诉讼请求原文"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "诉讼请求自由文本区完整内容，保留编号、括号及费用条件；不自行重写。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "诉讼请求自由文本区完整内容，保留编号、括号及费用条件；不自行重写。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F074",
+      "outputPath": "/诉讼请求/1.本金/截至日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/1.本金/properties/截至日期",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          12
+        ],
+        "labels": [
+          "1.本金"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "诉请尚欠本金的统计截止日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "诉请尚欠本金的统计截止日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F075",
+      "outputPath": "/诉讼请求/1.本金/尚欠本金",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/1.本金/properties/尚欠本金",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          12
+        ],
+        "labels": [
+          "1.本金"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "诉请尚欠本金，不能直接使用历史借款交付总额替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "诉请尚欠本金，不能直接使用历史借款交付总额替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F076",
+      "outputPath": "/诉讼请求/1.本金/币种",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/1.本金/properties/币种",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          12
+        ],
+        "labels": [
+          "1.本金"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本金币种，仅依据明确人民币、外币等文字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "本金币种，仅依据明确人民币、外币等文字。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F077",
+      "outputPath": "/诉讼请求/2.利息/截至日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/2.利息/properties/截至日期",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          13
+        ],
+        "labels": [
+          "2.利息"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "尚欠或暂计利息的统计日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "尚欠或暂计利息的统计日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F078",
+      "outputPath": "/诉讼请求/2.利息/尚欠利息",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/2.利息/properties/尚欠利息",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          13
+        ],
+        "labels": [
+          "2.利息"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "原文明示的利息金额，不按利率重新计算替换。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "原文明示的利息金额，不按利率重新计算替换。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F079",
+      "outputPath": "/诉讼请求/2.利息/计算方式",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/2.利息/properties/计算方式",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          13
+        ],
+        "labels": [
+          "2.利息"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "完整保留利息基数、标准、起止及暂计条件。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "完整保留利息基数、标准、起止及暂计条件。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F080",
+      "outputPath": "/诉讼请求/2.利息/计算基数",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/2.利息/properties/计算基数",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          13
+        ],
+        "labels": [
+          "2.利息"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "诉请计算利息采用的本金基数，需明示。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "诉请计算利息采用的本金基数，需明示。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F081",
+      "outputPath": "/诉讼请求/2.利息/利率标准",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/2.利息/properties/利率标准",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          13
+        ],
+        "labels": [
+          "2.利息"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "诉请利息采用的文字标准，如一年期贷款市场报价利率；不查询外部数值。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "诉请利息采用的文字标准，如一年期贷款市场报价利率；不查询外部数值。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F082",
+      "outputPath": "/诉讼请求/2.利息/起算日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/2.利息/properties/起算日期",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          13
+        ],
+        "labels": [
+          "2.利息"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "诉请利息明确起算日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "诉请利息明确起算日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F083",
+      "outputPath": "/诉讼请求/2.利息/暂计截止日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/2.利息/properties/暂计截止日期",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          13
+        ],
+        "labels": [
+          "2.利息"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "利息暂计截止日期，不代表最终停止计息。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "利息暂计截止日期，不代表最终停止计息。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F084",
+      "outputPath": "/诉讼请求/2.利息/是否请求支付至实际清偿之日止",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          13
+        ],
+        "labels": [
+          "2.利息"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "利息是否请求至实际清偿之日；可依据勾选或明确诉请。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "利息是否请求至实际清偿之日；可依据勾选或明确诉请。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F085",
+      "outputPath": "/诉讼请求/3.是否要求提前还款或解除合同/是否要求",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          14
+        ],
+        "labels": [
+          "3.是否要求提前还款或解除合同"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否要求提前还款或解除合同，不能由已逾期推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否要求提前还款或解除合同，不能由已逾期推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F086",
+      "outputPath": "/诉讼请求/3.是否要求提前还款或解除合同/请求类型",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/3.是否要求提前还款或解除合同/properties/请求类型",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          14
+        ],
+        "labels": [
+          "3.是否要求提前还款或解除合同"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本项下提前还款与解除合同选项。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "提前还款（加速到期）",
+            "解除合同"
+          ]
+        },
+        "minItems": 1,
+        "description": "本项下提前还款与解除合同选项。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F087",
+      "outputPath": "/诉讼请求/4.是否主张担保权利/是否主张",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          15
+        ],
+        "labels": [
+          "4.是否主张担保权利"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否主张担保权利；不能从未填写担保信息直接推定否。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否主张担保权利；不能从未填写担保信息直接推定否。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F088",
+      "outputPath": "/诉讼请求/4.是否主张担保权利/内容",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/4.是否主张担保权利/properties/内容",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          15
+        ],
+        "labels": [
+          "4.是否主张担保权利"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "主张担保权利的具体内容。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "主张担保权利的具体内容。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F089",
+      "outputPath": "/诉讼请求/5.是否主张实现债权的费用/是否主张",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          16
+        ],
+        "labels": [
+          "5.是否主张实现债权的费用"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否请求实现债权的费用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否请求实现债权的费用。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F090",
+      "outputPath": "/诉讼请求/5.是否主张实现债权的费用/明细",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/5.是否主张实现债权的费用/properties/明细",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          16
+        ],
+        "labels": [
+          "5.是否主张实现债权的费用"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "费用明细及条件，保留如有等限定，不生成未提供金额。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "费用明细及条件，保留如有等限定，不生成未提供金额。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F091",
+      "outputPath": "/诉讼请求/6.是否主张诉讼费用",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          17
+        ],
+        "labels": [
+          "6.是否主张诉讼费用"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否请求诉讼费用；不由第5项自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否请求诉讼费用；不由第5项自动复制。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F092",
+      "outputPath": "/诉讼请求/7.其他请求",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/7.其他请求",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          18
+        ],
+        "labels": [
+          "7.其他请求"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本栏明确填写的其他请求；不得把已有本金和利息重复放入。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "本栏明确填写的其他请求；不得把已有本金和利息重复放入。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F093",
+      "outputPath": "/诉讼请求/8.标的总额/金额",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/8.标的总额/properties/金额",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          19
+        ],
+        "labels": [
+          "8.标的总额"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "原文明示标的总额；计算检查只告警，不改写。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "原文明示标的总额；计算检查只告警，不改写。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F094",
+      "outputPath": "/诉讼请求/8.标的总额/暂计截止日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/诉讼请求/properties/8.标的总额/properties/暂计截止日期",
+      "module": "claims",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          19
+        ],
+        "labels": [
+          "8.标的总额"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "标的总额标注的暂计日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "标的总额标注的暂计日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F095",
+      "outputPath": "/约定管辖和诉前保全/1.有无仲裁、法院管辖约定/有无约定",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/hasNone",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          21
+        ],
+        "labels": [
+          "1.有无仲裁、法院管辖约定"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "有无仲裁或法院管辖约定；双方都未选时为 null，不依据无书面合同推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "有",
+          "无",
+          null
+        ],
+        "description": "有无仲裁或法院管辖约定；双方都未选时为 null，不依据无书面合同推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F096",
+      "outputPath": "/约定管辖和诉前保全/1.有无仲裁、法院管辖约定/合同条款及内容",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/约定管辖和诉前保全/properties/1.有无仲裁、法院管辖约定/properties/合同条款及内容",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          21
+        ],
+        "labels": [
+          "1.有无仲裁、法院管辖约定"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "仲裁或管辖条款原文及内容，不自行推荐法院。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "仲裁或管辖条款原文及内容，不自行推荐法院。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F097",
+      "outputPath": "/约定管辖和诉前保全/2.是否已经诉前保全/是否已经诉前保全",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          22
+        ],
+        "labels": [
+          "2.是否已经诉前保全"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "只指已经发生的诉前保全，不能从拟申请保全或费用如有推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "只指已经发生的诉前保全，不能从拟申请保全或费用如有推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F098",
+      "outputPath": "/约定管辖和诉前保全/2.是否已经诉前保全/保全法院",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/约定管辖和诉前保全/properties/2.是否已经诉前保全/properties/保全法院",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          22
+        ],
+        "labels": [
+          "2.是否已经诉前保全"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "已实施诉前保全的法院。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "已实施诉前保全的法院。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F099",
+      "outputPath": "/约定管辖和诉前保全/2.是否已经诉前保全/保全时间",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/约定管辖和诉前保全/properties/2.是否已经诉前保全/properties/保全时间",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          22
+        ],
+        "labels": [
+          "2.是否已经诉前保全"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "已实施诉前保全的完整日期；仅有年月时保留在审核原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "已实施诉前保全的完整日期；仅有年月时保留在审核原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F100",
+      "outputPath": "/约定管辖和诉前保全/2.是否已经诉前保全/保全案号",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/约定管辖和诉前保全/properties/2.是否已经诉前保全/properties/保全案号",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          22
+        ],
+        "labels": [
+          "2.是否已经诉前保全"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "诉前保全案号，保留括号及字母。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "诉前保全案号，保留括号及字母。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F101",
+      "outputPath": "/事实与理由/事实与理由原文",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/事实与理由原文",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          24
+        ],
+        "labels": [
+          "事实与理由原文"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "事实与理由自由文本完整原文，保留当事人关系、承诺及催收表述。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "事实与理由自由文本完整原文，保留当事人关系、承诺及催收表述。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F102",
+      "outputPath": "/事实与理由/1.合同的签订情况（名称、编号、签订时间、地点等）/签订情况原文",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/1.合同的签订情况（名称、编号、签订时间、地点等）/properties/签订情况原文",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          25
+        ],
+        "labels": [
+          "1.合同的签订情况（名称、编号、签订时间、地点等）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本栏合同签订情况原文，如无书面合同；不能改写为不存在借贷合同。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "本栏合同签订情况原文，如无书面合同；不能改写为不存在借贷合同。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F103",
+      "outputPath": "/事实与理由/1.合同的签订情况（名称、编号、签订时间、地点等）/合同名称",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/1.合同的签订情况（名称、编号、签订时间、地点等）/properties/合同名称",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          25
+        ],
+        "labels": [
+          "1.合同的签订情况（名称、编号、签订时间、地点等）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确提供的合同名称；模板文书标题不是借款合同名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确提供的合同名称；模板文书标题不是借款合同名称。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F104",
+      "outputPath": "/事实与理由/1.合同的签订情况（名称、编号、签订时间、地点等）/合同编号",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/1.合同的签订情况（名称、编号、签订时间、地点等）/properties/合同编号",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          25
+        ],
+        "labels": [
+          "1.合同的签订情况（名称、编号、签订时间、地点等）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确提供的合同编号。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确提供的合同编号。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F105",
+      "outputPath": "/事实与理由/1.合同的签订情况（名称、编号、签订时间、地点等）/签订时间",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/1.合同的签订情况（名称、编号、签订时间、地点等）/properties/签订时间",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          25
+        ],
+        "labels": [
+          "1.合同的签订情况（名称、编号、签订时间、地点等）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "合同明确签订日期，不能用转账日期替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "合同明确签订日期，不能用转账日期替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F106",
+      "outputPath": "/事实与理由/1.合同的签订情况（名称、编号、签订时间、地点等）/签订地点",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/1.合同的签订情况（名称、编号、签订时间、地点等）/properties/签订地点",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          25
+        ],
+        "labels": [
+          "1.合同的签订情况（名称、编号、签订时间、地点等）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "合同明确签订地点，不能用当事人住址替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "合同明确签订地点，不能用当事人住址替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F107",
+      "outputPath": "/事实与理由/2.签订主体/出借人",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/2.签订主体/properties/出借人",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          26
+        ],
+        "labels": [
+          "2.签订主体"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确的出借人名称，借助主体索引识别代称，不把原告身份一律等同出借人。 未提及时为 null。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "description": "明确的出借人名称，借助主体索引识别代称，不把原告身份一律等同出借人。 未提及时为 null。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "repeat-text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F108",
+      "outputPath": "/事实与理由/2.签订主体/借款人",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/2.签订主体/properties/借款人",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          26
+        ],
+        "labels": [
+          "2.签订主体"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确的借款人名称，不把被告身份一律等同借款人。 未提及时为 null。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "description": "明确的借款人名称，不把被告身份一律等同借款人。 未提及时为 null。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "repeat-text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F109",
+      "outputPath": "/事实与理由/3.借款金额/约定",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/3.借款金额/properties/约定",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          27
+        ],
+        "labels": [
+          "3.借款金额"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确约定的借款金额；不能仅凭实际转账额补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确约定的借款金额；不能仅凭实际转账额补齐。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F110",
+      "outputPath": "/事实与理由/3.借款金额/实际提供",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/3.借款金额/properties/实际提供",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          27
+        ],
+        "labels": [
+          "3.借款金额"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "实际交付的借款金额，可依据事实原文中的明确转账。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "实际交付的借款金额，可依据事实原文中的明确转账。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F111",
+      "outputPath": "/事实与理由/3.借款金额/提供方式",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/3.借款金额/properties/提供方式",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          27
+        ],
+        "labels": [
+          "3.借款金额"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "借款实际提供方式，可依据明确叙述，不限于本栏勾选。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "现金",
+            "转账",
+            "其他"
+          ]
+        },
+        "minItems": 1,
+        "description": "借款实际提供方式，可依据明确叙述，不限于本栏勾选。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F112",
+      "outputPath": "/事实与理由/3.借款金额/其他说明",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/3.借款金额/properties/其他说明",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          27
+        ],
+        "labels": [
+          "3.借款金额"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "提供方式为其他时对应的说明。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "提供方式为其他时对应的说明。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F113",
+      "outputPath": "/事实与理由/4.借款期限/是否到期",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          28
+        ],
+        "labels": [
+          "4.借款期限"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "借款是否到期，可依据现还款期限已过等明确表述；不依赖运行当天推算。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "借款是否到期，可依据现还款期限已过等明确表述；不依赖运行当天推算。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F114",
+      "outputPath": "/事实与理由/4.借款期限/约定起始日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/4.借款期限/properties/约定起始日期",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          28
+        ],
+        "labels": [
+          "4.借款期限"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "约定借款期限的完整起始日期，不能以交付日期替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "约定借款期限的完整起始日期，不能以交付日期替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F115",
+      "outputPath": "/事实与理由/4.借款期限/约定截止日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/4.借款期限/properties/约定截止日期",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          28
+        ],
+        "labels": [
+          "4.借款期限"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "约定借款期限的完整截止日期；仅年月、月底等相对表述首版不补成日。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "约定借款期限的完整截止日期；仅年月、月底等相对表述首版不补成日。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F116",
+      "outputPath": "/事实与理由/4.借款期限/期限原文",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/4.借款期限/properties/期限原文",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          28
+        ],
+        "labels": [
+          "4.借款期限"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "保留约定期限、不完整日期或月底前等承诺原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "保留约定期限、不完整日期或月底前等承诺原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F117",
+      "outputPath": "/事实与理由/5.借款利率/利率",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/5.借款利率/properties/利率",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          29
+        ],
+        "labels": [
+          "5.借款利率"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "合同约定利率的百分数数值，例如年利率12%保存12；不填诉请LPR标准。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "合同约定利率的百分数数值，例如年利率12%保存12；不填诉请LPR标准。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)(\\.[0-9]+)?$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F118",
+      "outputPath": "/事实与理由/5.借款利率/周期",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/ratePeriod",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          29
+        ],
+        "labels": [
+          "5.借款利率"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "约定利率周期，年季月不能猜测。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "年",
+          "季",
+          "月",
+          null
+        ],
+        "description": "约定利率周期，年季月不能猜测。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F119",
+      "outputPath": "/事实与理由/5.借款利率/合同条款编号",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/5.借款利率/properties/合同条款编号",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          29
+        ],
+        "labels": [
+          "5.借款利率"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "约定利率条款的条号。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "约定利率条款的条号。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F120",
+      "outputPath": "/事实与理由/6.借款提供时间/*/提供日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/6.借款提供时间/items/properties/提供日期",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          30
+        ],
+        "labels": [
+          "6.借款提供时间"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "该笔借款实际交付日期，可依据事实段明确转账日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "该笔借款实际交付日期，可依据事实段明确转账日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F121",
+      "outputPath": "/事实与理由/6.借款提供时间/*/金额",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/6.借款提供时间/items/properties/金额",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          30
+        ],
+        "labels": [
+          "6.借款提供时间"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本次借款交付金额，不混用尚欠本金。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "本次借款交付金额，不混用尚欠本金。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F122",
+      "outputPath": "/事实与理由/7.还款方式/方式",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/7.还款方式/properties/方式",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          31
+        ],
+        "labels": [
+          "7.还款方式"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "合同明确约定的还款方式；不得由归还承诺推定一次还本付息。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "到期一次性还本付息",
+            "按月计息、到期一次性还本",
+            "按季计息、到期一次性还本",
+            "按年计息、到期一次性还本",
+            "其他"
+          ]
+        },
+        "minItems": 1,
+        "description": "合同明确约定的还款方式；不得由归还承诺推定一次还本付息。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F123",
+      "outputPath": "/事实与理由/7.还款方式/其他说明",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/7.还款方式/properties/其他说明",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          31
+        ],
+        "labels": [
+          "7.还款方式"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "其他还款方式的对应说明。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "其他还款方式的对应说明。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F124",
+      "outputPath": "/事实与理由/8.还款情况/已还本金",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/8.还款情况/properties/已还本金",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          32
+        ],
+        "labels": [
+          "8.还款情况"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确已偿还本金；尚欠等于交付额也不能自动填0。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确已偿还本金；尚欠等于交付额也不能自动填0。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F125",
+      "outputPath": "/事实与理由/8.还款情况/已还利息",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/8.还款情况/properties/已还利息",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          32
+        ],
+        "labels": [
+          "8.还款情况"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确已付利息；未记载不能填0。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确已付利息；未记载不能填0。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F126",
+      "outputPath": "/事实与理由/8.还款情况/还息至",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/8.还款情况/properties/还息至",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          32
+        ],
+        "labels": [
+          "8.还款情况"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确已付利息覆盖至的完整日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确已付利息覆盖至的完整日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F127",
+      "outputPath": "/事实与理由/9.是否存在逾期还款/是否存在",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          33
+        ],
+        "labels": [
+          "9.是否存在逾期还款"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否存在逾期还款，依据本栏或明确事实。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否存在逾期还款，依据本栏或明确事实。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F128",
+      "outputPath": "/事实与理由/9.是否存在逾期还款/逾期起始日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/9.是否存在逾期还款/properties/逾期起始日期",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          33
+        ],
+        "labels": [
+          "9.是否存在逾期还款"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确逾期起始日；不能仅以诉请利息起算日替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确逾期起始日；不能仅以诉请利息起算日替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F129",
+      "outputPath": "/事实与理由/9.是否存在逾期还款/逾期时长原文",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/9.是否存在逾期还款/properties/逾期时长原文",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          33
+        ],
+        "labels": [
+          "9.是否存在逾期还款"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确的逾期时长描述；表格固定提示至今已逾期不是填写值。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确的逾期时长描述；表格固定提示至今已逾期不是填写值。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F130",
+      "outputPath": "/事实与理由/10.是否签订物的担保（抵押、质押）合同/是否签订",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          34
+        ],
+        "labels": [
+          "10.是否签订物的担保（抵押、质押）合同"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否签订物的担保合同，依据明确否定或勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否签订物的担保合同，依据明确否定或勾选。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F131",
+      "outputPath": "/事实与理由/10.是否签订物的担保（抵押、质押）合同/签订时间",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/10.是否签订物的担保（抵押、质押）合同/properties/签订时间",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          34
+        ],
+        "labels": [
+          "10.是否签订物的担保（抵押、质押）合同"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "物的担保合同完整签订日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "物的担保合同完整签订日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F132",
+      "outputPath": "/事实与理由/11.担保人、担保物/担保人",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/11.担保人、担保物/properties/担保人",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          35
+        ],
+        "labels": [
+          "11.担保人、担保物"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确的物的担保人名称，不把空白栏识别成主体。 未提及时为 null。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "description": "明确的物的担保人名称，不把空白栏识别成主体。 未提及时为 null。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "repeat-text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F133",
+      "outputPath": "/事实与理由/11.担保人、担保物/担保物",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/11.担保人、担保物/properties/担保物",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          35
+        ],
+        "labels": [
+          "11.担保人、担保物"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确的担保物描述，首版不拆出未在模板列明的权属证号等字段。 未提及时为 null。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "description": "明确的担保物描述，首版不拆出未在模板列明的权属证号等字段。 未提及时为 null。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "repeat-text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F134",
+      "outputPath": "/事实与理由/12.是否最高额担保（抵押、质押）/是否最高额担保",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          36
+        ],
+        "labels": [
+          "12.是否最高额担保（抵押、质押）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否最高额抵押或质押担保。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否最高额抵押或质押担保。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F135",
+      "outputPath": "/事实与理由/12.是否最高额担保（抵押、质押）/担保债权的确定时间",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/12.是否最高额担保（抵押、质押）/properties/担保债权的确定时间",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          36
+        ],
+        "labels": [
+          "12.是否最高额担保（抵押、质押）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确担保债权确定日期，不用签订日期替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确担保债权确定日期，不用签订日期替代。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F136",
+      "outputPath": "/事实与理由/12.是否最高额担保（抵押、质押）/担保额度",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/12.是否最高额担保（抵押、质押）/properties/担保额度",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          36
+        ],
+        "labels": [
+          "12.是否最高额担保（抵押、质押）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "明确最高额担保额度。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "明确最高额担保额度。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "pattern": "^(0|[1-9][0-9]*)\\.[0-9]{2}$"
+      },
+      "style": {
+        "widget": "decimal-input"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F137",
+      "outputPath": "/事实与理由/13.是否办理抵押、质押登记/是否办理",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          37
+        ],
+        "labels": [
+          "13.是否办理抵押、质押登记"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否办理抵押或质押登记。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否办理抵押或质押登记。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F138",
+      "outputPath": "/事实与理由/13.是否办理抵押、质押登记/登记类型",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/13.是否办理抵押、质押登记/properties/登记类型",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          37
+        ],
+        "labels": [
+          "13.是否办理抵押、质押登记"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "正式登记、预告登记选项。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "enum": [
+            "正式登记",
+            "预告登记"
+          ]
+        },
+        "minItems": 1,
+        "description": "正式登记、预告登记选项。 同组集中存储，去重；未提供选择时为 null，不用空数组。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "checkbox-group"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F139",
+      "outputPath": "/事实与理由/14.是否签订保证合同/是否签订",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          38
+        ],
+        "labels": [
+          "14.是否签订保证合同"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否签订保证合同。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否签订保证合同。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F140",
+      "outputPath": "/事实与理由/14.是否签订保证合同/签订时间",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/14.是否签订保证合同/properties/签订时间",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          38
+        ],
+        "labels": [
+          "14.是否签订保证合同"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "保证合同完整签订日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "保证合同完整签订日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F141",
+      "outputPath": "/事实与理由/14.是否签订保证合同/保证人",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/14.是否签订保证合同/properties/保证人",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          38
+        ],
+        "labels": [
+          "14.是否签订保证合同"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "保证合同中的保证人名称，不能与物的担保人自动合并。 未提及时为 null。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "description": "保证合同中的保证人名称，不能与物的担保人自动合并。 未提及时为 null。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "repeat-text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F142",
+      "outputPath": "/事实与理由/14.是否签订保证合同/主要内容",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/14.是否签订保证合同/properties/主要内容",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          38
+        ],
+        "labels": [
+          "14.是否签订保证合同"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "保证合同主要内容原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "保证合同主要内容原文。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F143",
+      "outputPath": "/事实与理由/14.是否签订保证合同/保证方式",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/guaranteeType",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          38
+        ],
+        "labels": [
+          "14.是否签订保证合同"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "单份保证合同的一般保证或连带责任保证，不自行法律推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "一般保证",
+          "连带责任保证",
+          null
+        ],
+        "description": "单份保证合同的一般保证或连带责任保证，不自行法律推定。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F144",
+      "outputPath": "/事实与理由/15.其他担保方式/是否存在",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/yesNo",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          39
+        ],
+        "labels": [
+          "15.其他担保方式"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否存在其他担保方式。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          null
+        ],
+        "description": "是否存在其他担保方式。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F145",
+      "outputPath": "/事实与理由/15.其他担保方式/形式",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/15.其他担保方式/properties/形式",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          39
+        ],
+        "labels": [
+          "15.其他担保方式"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "其他担保的明确形式。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "其他担保的明确形式。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F146",
+      "outputPath": "/事实与理由/15.其他担保方式/签订时间",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/15.其他担保方式/properties/签订时间",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          39
+        ],
+        "labels": [
+          "15.其他担保方式"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "其他担保的完整签订日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "其他担保的完整签订日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F147",
+      "outputPath": "/事实与理由/16.其他需要说明的内容（可另附页）",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/16.其他需要说明的内容（可另附页）",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          40
+        ],
+        "labels": [
+          "16.其他需要说明的内容（可另附页）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本栏或明确标注附件中的其他说明，不重复自动生成事实摘要。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "本栏或明确标注附件中的其他说明，不重复自动生成事实摘要。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F148",
+      "outputPath": "/事实与理由/17.请求依据/合同约定",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/17.请求依据/properties/合同约定",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          41
+        ],
+        "labels": [
+          "17.请求依据"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "原文提出的合同约定依据；没有书面合同不等于本字段自动为无。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "原文提出的合同约定依据；没有书面合同不等于本字段自动为无。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F149",
+      "outputPath": "/事实与理由/17.请求依据/法律规定",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/17.请求依据/properties/法律规定",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          41
+        ],
+        "labels": [
+          "17.请求依据"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "仅转录原文援引的法规条文；不补全、不验证其当前法律适用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "仅转录原文援引的法规条文；不补全、不验证其当前法律适用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F150",
+      "outputPath": "/事实与理由/18.证据清单（可另附页）",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/18.证据清单（可另附页）",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          42
+        ],
+        "labels": [
+          "18.证据清单（可另附页）"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "只转录正式证据清单或明确列明的附件；事实中提到录音不自动生成证据名称和编号。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "只转录正式证据清单或明确列明的附件；事实中提到录音不自动生成证据名称和编号。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F151",
+      "outputPath": "/对纠纷解决方式的意愿/是否了解调解作为非诉讼纠纷解决方式，能及时、高效、低成本、不伤和气地解决纠纷",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/understanding",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          44
+        ],
+        "labels": [
+          "是否了解调解作为非诉讼纠纷解决方式，能及时、高效、低成本、不伤和气地解决纠纷"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "本项对调解的了解程度；仅提取选择，固定告知文字不代表本人选择。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "了解",
+          "不了解",
+          null
+        ],
+        "description": "本项对调解的了解程度；仅提取选择，固定告知文字不代表本人选择。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F152",
+      "outputPath": "/对纠纷解决方式的意愿/是否了解先行调解解决纠纷的好处/1.调解启动与诉讼排期",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/understanding",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          45
+        ],
+        "labels": [
+          "是否了解先行调解解决纠纷的好处"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "独立提取本项了解程度。告知原文：立案后选择先行调解的，可以很快启动调解程序。如不同意调解，法院将依程序开庭审理案件，但可能需要经过较长一段时间的排期等待，且审理、执行周期相对较长。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "了解",
+          "不了解",
+          null
+        ],
+        "description": "独立提取本项了解程度。告知原文：立案后选择先行调解的，可以很快启动调解程序。如不同意调解，法院将依程序开庭审理案件，但可能需要经过较长一段时间的排期等待，且审理、执行周期相对较长。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "proposed_summary_key"
+    },
+    {
+      "fieldId": "F153",
+      "outputPath": "/对纠纷解决方式的意愿/是否了解先行调解解决纠纷的好处/2.调解相关诉讼费用",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/understanding",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          45
+        ],
+        "labels": [
+          "是否了解先行调解解决纠纷的好处"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "独立提取本项了解程度。告知原文：选择先行调解，调解成功且自动履行的免交诉讼费用，申请司法确认的不交纳诉讼费用，要求出具调解书的减半交纳诉讼费用。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "了解",
+          "不了解",
+          null
+        ],
+        "description": "独立提取本项了解程度。告知原文：选择先行调解，调解成功且自动履行的免交诉讼费用，申请司法确认的不交纳诉讼费用，要求出具调解书的减半交纳诉讼费用。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "proposed_summary_key"
+    },
+    {
+      "fieldId": "F154",
+      "outputPath": "/对纠纷解决方式的意愿/是否了解先行调解解决纠纷的好处/3.更换调解组织和调解员",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/understanding",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          45
+        ],
+        "labels": [
+          "是否了解先行调解解决纠纷的好处"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "独立提取本项了解程度。告知原文：首次调解不成功，但仍有继续调解意愿的，可以选择更换调解组织和调解员再进行调解。调解无法达成一致意见的，法院将依程序排期开庭。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "了解",
+          "不了解",
+          null
+        ],
+        "description": "独立提取本项了解程度。告知原文：首次调解不成功，但仍有继续调解意愿的，可以选择更换调解组织和调解员再进行调解。调解无法达成一致意见的，法院将依程序排期开庭。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "proposed_summary_key"
+    },
+    {
+      "fieldId": "F155",
+      "outputPath": "/对纠纷解决方式的意愿/是否了解先行调解解决纠纷的好处/4.调解保密性",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/understanding",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          45
+        ],
+        "labels": [
+          "是否了解先行调解解决纠纷的好处"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "独立提取本项了解程度。告知原文：依照法律规定，调解具有保密性要求，调解过程不公开，调解协议未经当事人同意不得公开。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "了解",
+          "不了解",
+          null
+        ],
+        "description": "独立提取本项了解程度。告知原文：依照法律规定，调解具有保密性要求，调解过程不公开，调解协议未经当事人同意不得公开。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "proposed_summary_key"
+    },
+    {
+      "fieldId": "F156",
+      "outputPath": "/对纠纷解决方式的意愿/是否了解先行调解解决纠纷的好处/5.调解协议效力",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/understanding",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          45
+        ],
+        "labels": [
+          "是否了解先行调解解决纠纷的好处"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "独立提取本项了解程度。告知原文：调解达成的协议具有法律效力，可以依照法律规定申请司法确认，具有强制执行效力。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "了解",
+          "不了解",
+          null
+        ],
+        "description": "独立提取本项了解程度。告知原文：调解达成的协议具有法律效力，可以依照法律规定申请司法确认，具有强制执行效力。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "proposed_summary_key"
+    },
+    {
+      "fieldId": "F157",
+      "outputPath": "/对纠纷解决方式的意愿/是否考虑先行调解",
+      "categoryCondition": null,
+      "schemaPointer": "#/$defs/mediationIntent",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          46
+        ],
+        "labels": [
+          "是否考虑先行调解"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "是否考虑先行调解；不从了解选项反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "type": [
+          "string",
+          "null"
+        ],
+        "enum": [
+          "是",
+          "否",
+          "暂不确定，想要了解更多内容",
+          null
+        ],
+        "description": "是否考虑先行调解；不从了解选项反推。 仅依据输入文本；未提及或无法可靠确定时返回 null。"
+      },
+      "style": {
+        "widget": "radio"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F158",
+      "outputPath": "/签署信息/具状人",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/签署信息/properties/具状人",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [],
+        "labels": [],
+        "bodyParagraph": "具状人签字盖章及日期"
+      },
+      "description": "仅提取具状人签字盖章位置实际填写的名称；不能从原告姓名自动补齐。 未提及时为 null。",
+      "schema": {
+        "type": [
+          "array",
+          "null"
+        ],
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1,
+        "description": "仅提取具状人签字盖章位置实际填写的名称；不能从原告姓名自动补齐。 未提及时为 null。",
+        "uniqueItems": true
+      },
+      "style": {
+        "widget": "repeat-text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F159",
+      "outputPath": "/签署信息/日期",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/签署信息/properties/日期",
+      "module": "remaining",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [],
+        "labels": [],
+        "bodyParagraph": "具状人签字盖章及日期"
+      },
+      "description": "仅提取落款实际日期；不能用制文日期或运行当天日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "仅提取落款实际日期；不能用制文日期或运行当天日期。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "format": "date",
+        "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+      },
+      "style": {
+        "widget": "date"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    },
+    {
+      "fieldId": "F160",
+      "outputPath": "/事实与理由/5.借款利率/补充内容",
+      "categoryCondition": null,
+      "schemaPointer": "#/properties/事实与理由/properties/5.借款利率/properties/补充内容",
+      "module": "facts",
+      "source": {
+        "file": "（民间借贷示例 1 ）V1-要素式起诉状（民间借贷）-金洲-赵月.docx",
+        "table": 1,
+        "rowsOneBased": [
+          29
+        ],
+        "labels": [
+          "5.借款利率"
+        ],
+        "bodyParagraph": null
+      },
+      "description": "借款利率的补充说明，例如借期内不计息、逾期利率标准、利率调整方式等；仅依据原文，未提及为 null。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+      "schema": {
+        "description": "借款利率的补充说明，例如借期内不计息、逾期利率标准、利率调整方式等；仅依据原文，未提及为 null。 仅依据输入文本；未提及或无法可靠确定时返回 null。",
+        "type": [
+          "string",
+          "null"
+        ],
+        "minLength": 1
+      },
+      "style": {
+        "widget": "text"
+      },
+      "missingValue": null,
+      "keyStatus": "initial_mapping"
+    }
+  ]
+}

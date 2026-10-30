@@ -1,0 +1,169 @@
+{
+  "schemaVersion": "0.1.0",
+  "businessFile": "example_from_attachment.json",
+  "status": "needs_confirmation",
+  "scope": "人工按附件文本和勾选状态整理的参考样例；不是运行模型后的准确率评估，也不验证法律适用或利息计算。",
+  "internalSubjectIndex": [
+    {
+      "subjectId": "P1",
+      "role": "原告",
+      "name": "金洲",
+      "outputPointer": "/原告/0"
+    },
+    {
+      "subjectId": "P2",
+      "role": "被告",
+      "name": "赵月",
+      "outputPointer": "/被告/0"
+    }
+  ],
+  "evidence": [
+    {
+      "paths": [
+        "/原告/0/data/sex"
+      ],
+      "sourceRowOneBased": 3,
+      "quote": "男þ 女¨",
+      "kind": "checked"
+    },
+    {
+      "paths": [
+        "/被告/0/data/sex"
+      ],
+      "sourceRowOneBased": 6,
+      "quote": "男¨ 女þ",
+      "kind": "checked"
+    },
+    {
+      "paths": [
+        "/事实与理由/3.借款金额/实际提供",
+        "/事实与理由/3.借款金额/提供方式",
+        "/事实与理由/6.借款提供时间/0/提供日期"
+      ],
+      "sourceRowOneBased": 24,
+      "quote": "2025年12月7日……原告出于信任，于当日通过工商银行向被告转账50000元",
+      "kind": "explicit_narrative"
+    },
+    {
+      "paths": [
+        "/事实与理由/4.借款期限/是否到期"
+      ],
+      "sourceRowOneBased": 24,
+      "quote": "现还款期限已过",
+      "kind": "explicit_narrative"
+    },
+    {
+      "paths": [
+        "/事实与理由/10.是否签订物的担保（抵押、质押）合同/是否签订",
+        "/事实与理由/12.是否最高额担保（抵押、质押）/是否最高额担保",
+        "/事实与理由/13.是否办理抵押、质押登记/是否办理",
+        "/事实与理由/14.是否签订保证合同/是否签订",
+        "/事实与理由/15.其他担保方式/是否存在"
+      ],
+      "sourceRowsOneBased": [
+        34,
+        36,
+        37,
+        38,
+        39
+      ],
+      "quote": "对应栏位否þ",
+      "kind": "checked"
+    },
+    {
+      "paths": [
+        "/对纠纷解决方式的意愿"
+      ],
+      "sourceRowsOneBased": [
+        44,
+        45,
+        46
+      ],
+      "quote": "了解项及先行调解是项的Wingdings字符00FE；不是空框00A8",
+      "kind": "checked_symbol"
+    }
+  ],
+  "issues": [
+    {
+      "type": "unselected",
+      "paths": [
+        "/委托诉讼代理人/是否委托"
+      ],
+      "message": "有、无均未勾选且未填代理人，保持null，不能填无。"
+    },
+    {
+      "type": "unselected",
+      "paths": [
+        "/诉讼请求/3.是否要求提前还款或解除合同/是否要求",
+        "/诉讼请求/4.是否主张担保权利/是否主张",
+        "/约定管辖和诉前保全"
+      ],
+      "message": "相关选项均空白，不能由其他否定信息级联推定。"
+    },
+    {
+      "type": "partial_date",
+      "paths": [
+        "/事实与理由/4.借款期限/约定截止日期"
+      ],
+      "quote": "2026年3月底前",
+      "message": "本版保留期限原文，不补成3月31日；如业务允许语义归一化需另定规则。"
+    },
+    {
+      "type": "distinct_semantics",
+      "paths": [
+        "/事实与理由/5.借款利率",
+        "/诉讼请求/2.利息/利率标准"
+      ],
+      "message": "诉请采用LPR不等于双方约定借款利率；合同利率字段保持null。"
+    },
+    {
+      "type": "conditional_cost",
+      "paths": [
+        "/诉讼请求/5.是否主张实现债权的费用/明细"
+      ],
+      "quote": "诉讼费用（保全费用，如有）",
+      "message": "保留如有，不能据此确定已经保全。"
+    },
+    {
+      "type": "not_a_value",
+      "paths": [
+        "/事实与理由/9.是否存在逾期还款/逾期时长原文"
+      ],
+      "message": "至今已逾期是未填完的表格提示，不作为逾期时长。"
+    },
+    {
+      "type": "not_an_exhibit_list",
+      "paths": [
+        "/事实与理由/18.证据清单（可另附页）"
+      ],
+      "message": "事实提及通话录音，但正式证据清单空白，首版不生成证据编号或清单。"
+    },
+    {
+      "type": "blank_signature",
+      "paths": [
+        "/签署信息"
+      ],
+      "message": "落款与日期未填写，不从原告姓名或系统日期补齐。"
+    },
+    {
+      "type": "not_recalculated",
+      "paths": [
+        "/诉讼请求/2.利息/尚欠利息"
+      ],
+      "message": "320.83仅按原文提取，未校验LPR数值、日计数或计息结果。"
+    }
+  ],
+  "upstreamRequirement": {
+    "checkboxEvidenceRequired": true,
+    "supportedExamples": [
+      "☑",
+      "☒",
+      "□",
+      "þ",
+      "¨",
+      "w:sym Wingdings 00FE/00A8"
+    ],
+    "policy": "必须保留选项文字、勾选状态和字符字体来源；如解析后只剩选项名而无状态，返回null并提示信息丢失，不猜测。",
+    "fontCaution": "þ和¨只在已确认的来源字体映射下转换，不作任意文本的全局替换。"
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:yaosushi:stage0:subject-index:v0.1",
+  "title": "共享主体索引",
+  "description": "一次请求内共享的主体索引。subjectId 只在 review/内部上下文使用，不进入业务 data。",
+  "type": "array",
+  "items": {
+    "$ref": "#/$defs/subject"
+  },
+  "$defs": {
+    "subject": {
+      "type": "object",
+      "required": [
+        "subjectId",
+        "role",
+        "entityType",
+        "name",
+        "aliases",
+        "outputPointer",
+        "sourceRefs"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "subjectId": {
+          "type": "string",
+          "pattern": "^[A-Z]+[0-9]+$",
+          "description": "内部主体 ID，例如 P1、P2、AG1。"
+        },
+        "role": {
+          "enum": [
+            "原告",
+            "被告",
+            "第三人",
+            "委托诉讼代理人"
+          ],
+          "description": "诉讼角色；代理人的角色固定为此值。"
+        },
+        "entityType": {
+          "enum": [
+            "自然人",
+            "法人、非法人组织"
+          ],
+          "description": "主体类型，与 party.category 一致。"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1,
+          "description": "主体名称；无法确定时为 null。"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true,
+          "description": "文本中的称谓/简称/别名，例如“原告”“原告公司”“被告”。"
+        },
+        "outputPointer": {
+          "type": "string",
+          "pattern": "^/",
+          "description": "在业务 JSON 中的位置，例如 /原告/0、/委托诉讼代理人/代理人/0。"
+        },
+        "principalIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]+[0-9]+$"
+          },
+          "uniqueItems": true,
+          "description": "仅代理人使用：其委托人 subjectId。MVP 为全局代理人区块，允许为空或未知。"
+        },
+        "sourceRefs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/sourceRef"
+          },
+          "description": "主体名称/角色/别名的文本来源，至少一条。"
+        }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": [
+        "fileContextIndex",
+        "charStart",
+        "charEnd",
+        "quote"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "fileContextIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "fileContext 数组下标，从 0 开始。"
+        },
+        "charStart": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "引文在 fileContext[fileContextIndex] 中的起始字符偏移（含）。"
+        },
+        "charEnd": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "引文结束字符偏移（不含）；业务校验必须保证 charEnd > charStart。"
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1,
+          "description": "原文引文，必须等于对应字符区间的内容。"
+        }
+      }
+    }
+  }
+}

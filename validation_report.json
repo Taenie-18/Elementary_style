@@ -1,0 +1,149 @@
+{
+  "schemaDraft": "2020-12",
+  "schemaSelfValidation": "passed",
+  "cases": [
+    {
+      "name": "attachment_reference_passes",
+      "expectedValid": true,
+      "passed": true,
+      "errorCount": 0
+    },
+    {
+      "name": "all_unknown_leaves_pass",
+      "expectedValid": true,
+      "passed": true,
+      "errorCount": 0
+    },
+    {
+      "name": "normalized_user_organization_passes",
+      "expectedValid": true,
+      "passed": true,
+      "errorCount": 0
+    },
+    {
+      "name": "missing_required_key_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "extra_root_key_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "category_data_mismatch_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "empty_party_array_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "string_null_rejected_for_enum",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "multi_sex_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "empty_multi_enum_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "duplicate_multi_enum_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "unknown_multi_enum_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "scalar_multi_enum_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "null_array_item_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "no_guarantee_with_details_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "other_detail_without_other_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "other_selected_without_detail_allowed",
+      "expectedValid": true,
+      "passed": true,
+      "errorCount": 0
+    },
+    {
+      "name": "yes_with_unknown_details_allowed",
+      "expectedValid": true,
+      "passed": true,
+      "errorCount": 0
+    },
+    {
+      "name": "impossible_calendar_date_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "money_float_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "money_without_two_decimals_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "ownership_other_mismatch_rejected",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    },
+    {
+      "name": "state_suboption_requires_state_ownership",
+      "expectedValid": false,
+      "passed": true,
+      "errorCount": 1
+    }
+  ],
+  "passed": 23,
+  "total": 23,
+  "configurationIntegrity": "passed",
+  "samplePrincipalPlusInterestEqualsStatedTotal": true,
+  "scope": "结构、条件约束和样例合计验证；不代表模型抽取准确率，不验证利息计算或法律适用。"
+}

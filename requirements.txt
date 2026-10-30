@@ -1,0 +1,13 @@
+# Python 3.11+（当前已在 3.11 / 3.12 验证）
+#
+# 运行时依赖
+jsonschema>=4.18,<5
+fastapi>=0.110,<1
+uvicorn>=0.27,<1
+#
+# API 测试依赖：tests/test_api.py 使用 fastapi.testclient，需要 httpx
+httpx>=0.27,<1
+#
+# 构建依赖：build_fields.py 读取源 DOCX 时需要 lxml
+# 只读取已有 Schema/配置/样例并运行服务时不需要安装
+lxml>=5,<7
